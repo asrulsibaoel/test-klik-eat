@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateChatsRoom extends Migration
+class CreateChatsRooms extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateChatsRoom extends Migration
      */
     public function up()
     {
-        Schema::create('chats_room', function (Blueprint $table) {
+        Schema::create('chats_rooms', function (Blueprint $table) {
             $table->increments('id');   
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +28,6 @@ class CreateChatsRoom extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chats_room');
+        Schema::dropIfExists('chats_rooms');
     }
 }

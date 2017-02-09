@@ -11,10 +11,12 @@
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::resource('pelanggan', 'PelangganController');
-Route::get('pelanggan', "PelangganController@index");
-Route::get('pelanggan/data', "PelangganController@data");
+
+Route::post('account/register', 'UserController@register');
+Route::post('account/login', "UserController@login");
+

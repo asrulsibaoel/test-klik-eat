@@ -16,15 +16,16 @@ class CreateTransactionsTable extends Migration
 
         Schema::create('transactions', function (Blueprint $table) {
             $table->string('id',30);
-            $table->primary('id');
-            $table->integer('users_id')->unsigned();
+            $table->primary('id')->nullable();
+            $table->integer('users_id')->unsigned()->nullable();
             $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
-            $table->decimal('discount','10','2');
-            $table->decimal('tax','10','2');
-            $table->decimal('subtotal','10','2');
-            $table->decimal('total','10','2');
-            $table->text('notes');
+            $table->decimal('discount','10','2')->nullable();
+            $table->decimal('tax','10','2')->nullable();
+            $table->decimal('subtotal','10','2')->nullable();
+            $table->decimal('total','10','2')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

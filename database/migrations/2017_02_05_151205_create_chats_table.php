@@ -16,12 +16,13 @@ class CreateChatsTable extends Migration
 
         Schema::create('chats', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('users_id')->unsigned();
+            $table->integer('users_id')->unsigned()->nullable();
             $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('chats_room_id')->unsigned();
-            $table->foreign('chats_room_id')->references('id')->on('chats_room')->onDelete('cascade');
-            $table->text('text')->comment('isinya harus json ya ');
+            $table->integer('chats_rooms_id')->unsigned()->nullable();
+            $table->foreign('chats_rooms_id')->references('id')->on('chats_rooms')->onDelete('cascade');
+            $table->text('text')->comment('isinya harus json ya ')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

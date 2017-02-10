@@ -27,14 +27,15 @@ class UserController extends Controller
 
         }else{
 
-            $data_input = $request->all();
+
+/*            $data_input = $request->all();
             $data_input['password']=bcrypt($request->input('password')); 
           
             $userCreated=User::create($data_input);        
-        
+*/        
             $result=array(
                 "success"=>true,
-                "row"=>$userCreated
+                "row"=>1
                 );
         }
 

@@ -12,13 +12,14 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
-      /*  $validator=Validator::make($request->all(), [
+        $validator=Validator::make($request->all(), [
             'email' => 'required|email|unique:Users|max:50',
             'password' => 'required',
             'name' => 'required',
         ]);
 
         // echo Helpers::result();
+$result=array();
         if($validator->fails()){
             $result=array(
                 "success"=>false,
@@ -28,16 +29,16 @@ class UserController extends Controller
         }else{
 
 
-            $data_input = $request->all();
+          /*  $data_input = $request->all();
             $data_input['password']=bcrypt($request->input('password')); 
           
             $userCreated=User::create($data_input);        
-        
+        */
             $result=array(
                 "success"=>true,
-                "row"=>$userCreated
+                // "row"=>$userCreated
                 );
-        }*/
+        }
 
         return response()->json($result);
 

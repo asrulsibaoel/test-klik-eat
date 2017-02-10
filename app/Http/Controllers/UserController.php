@@ -13,7 +13,7 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $validator=Validator::make($request->all(), [
-            'email' => 'required|email|unique:Users|max:50',
+            'email' => 'required|email|unique:users|max:50',
             'password' => 'required',
             'name' => 'required',
         ]);
@@ -29,14 +29,14 @@ $result=array();
         }else{
 
 
-          /*  $data_input = $request->all();
+            $data_input = $request->all();
             $data_input['password']=bcrypt($request->input('password')); 
           
             $userCreated=User::create($data_input);        
-        */
+        
             $result=array(
                 "success"=>true,
-                // "row"=>$userCreated
+                "row"=>$userCreated
                 );
         }
 

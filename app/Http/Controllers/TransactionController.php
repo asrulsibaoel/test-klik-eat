@@ -66,10 +66,18 @@ class TransactionController extends Controller
     {
 
         $row=Transaction::find($id);
-        $result=array(
-            'success'=>true,
-            'row'=>$row
-        );
+                if($row!=null){
+            $result=array(
+                'success'=>true,
+                'row'=>$row
+            );
+        }else{
+            $result=array(
+                'success'=>false,
+                'row'=>"Data Not Found"
+            );
+        }
+
 
         return response()->json($result);
 
@@ -106,7 +114,7 @@ class TransactionController extends Controller
             }else{
                 $result=array(
                     "success"=>false,
-                    "messages"=>"You are not allowed for updated this transaction"
+                    "messages"=>"Transaction Not Found"
                     );
             }
         }

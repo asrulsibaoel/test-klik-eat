@@ -73,17 +73,17 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/transaction/detail/{id}', 'TransactionsDetailController@data');
     Route::get('/transaction/{id}', 'TransactionController@detail');
     Route::post('/transaction/create', 'TransactionController@create');
-    Route::post('/transaction/update', 'TransactionController@update');
+    // Route::post('/transaction/update', 'TransactionController@update');
     Route::get('/transaction/delete/{id}', 'TransactionController@delete');
     Route::get('/transaction/force_delete/{id}', 'TransactionController@force_delete');
 
 /*------------------------------------
 	CRUD Transactions Detail
 ------------------------------------*/
-    Route::any('/transactions_detail', 'TransactionsDetailController@data');
+    // Route::any('/transactions_detail', 'TransactionsDetailController@data');
     Route::get('/transactions_detail/{id}', 'TransactionsDetailController@detail');
     Route::post('/transactions_detail/create', 'TransactionsDetailController@create');
-    Route::post('/transactions_detail/update', 'TransactionsDetailController@update');
+    // Route::post('/transactions_detail/update', 'TransactionsDetailController@update');
     Route::get('/transactions_detail/delete/{id}', 'TransactionsDetailController@delete');
     Route::get('/transactions_detail/force_delete/{id}', 'TransactionsDetailController@force_delete');
 

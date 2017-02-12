@@ -64,10 +64,18 @@ class ProductController extends Controller
     {
 
         $row=Product::find($id);
-        $result=array(
-            'success'=>true,
-            'row'=>$row
-        );
+                if($row!=null){
+            $result=array(
+                'success'=>true,
+                'row'=>$row
+            );
+        }else{
+            $result=array(
+                'success'=>false,
+                'row'=>"Data Not Found"
+            );
+        }
+
 
         return response()->json($result);
 
@@ -106,7 +114,7 @@ class ProductController extends Controller
             }else{
                 $result=array(
                     "success"=>false,
-                    "messages"=>"You are not allowed for updated this product"
+                    "messages"=>"Product Not Found or Not allowed for updated this product"
                     );
             }
         }

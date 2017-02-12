@@ -63,10 +63,18 @@ class CommentController extends Controller
     {
 
         $row=Comment::find($id);
-        $result=array(
-            'success'=>true,
-            'row'=>$row
-        );
+                if($row!=null){
+            $result=array(
+                'success'=>true,
+                'row'=>$row
+            );
+        }else{
+            $result=array(
+                'success'=>false,
+                'row'=>"Data Not Found"
+            );
+        }
+
 
         return response()->json($result);
 
@@ -104,7 +112,7 @@ class CommentController extends Controller
             }else{
                 $result=array(
                     "success"=>false,
-                    "messages"=>"You are not allowed for updated this comment"
+                    "messages"=>"Comment Not Found"
                     );
             }
         }

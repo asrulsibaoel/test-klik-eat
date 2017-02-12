@@ -61,10 +61,18 @@ class ChatsRoomController extends Controller
     {
 
         $row=ChatsRoom::find($id);
-        $result=array(
-            'success'=>true,
-            'row'=>$row
-        );
+                if($row!=null){
+            $result=array(
+                'success'=>true,
+                'row'=>$row
+            );
+        }else{
+            $result=array(
+                'success'=>false,
+                'row'=>"Data Not Found"
+            );
+        }
+
 
         return response()->json($result);
 
@@ -99,7 +107,7 @@ class ChatsRoomController extends Controller
             }else{
                 $result=array(
                     "success"=>false,
-                    "messages"=>"You are not allowed for updated this chatsRoom"
+                    "messages"=>"chatsRoom Not Found"
                     );
             }
         }

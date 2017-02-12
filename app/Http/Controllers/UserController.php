@@ -120,6 +120,10 @@ $result=array();
                 unset($data_input['password']);
             }
 
+            if(isset($data_input['email'])){
+                unset($data_input['email']);
+            }
+
             $isUpdated=Auth::user()->update($data_input);        
             if($isUpdated){
                 $result=array(

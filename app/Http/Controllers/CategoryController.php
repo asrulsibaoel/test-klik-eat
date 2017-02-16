@@ -8,72 +8,78 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
-{
+{   
+    private $payload_list=array("ListCategory"=> null);
+    private $payload_info=array("InfoCategory"=> null);
 
     public function data(Request $request)
     {
-  /*
-    // debugging Queyr
-  \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
-        var_dump($query->sql);
-    });
-*/
-        $data=Category::all();
-        $result=array(
-            'success'=>true,
-            'data'=>$data
-        );
+      
+/*      \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
+            var_dump($query->sql);
+        });
+*/    
+        $category=new Category();
+        $fillable=$category->fillable;
 
-        return response()->json($result);
+        $queryCategory=$category;
 
+        // searching
+        if($request->input('q')){
+            $q=$request->input('q');
+            if(is_array($fillable))
+                foreach ($fillable as $field) {
+                    $queryCategory=$queryCategory->orWhere($field,'like',$q.'%');
+                }
+        }
+
+        // sorting
+        if($request->input('sortby')){
+            $sortby=$request->input('sortby');
+            $order=($request->input('order')) ? $request->input('order') : 'asc';
+                    $queryCategory=$queryCategory->orderBy($sortby,$order);
+        }
+
+
+        $listCategory=$queryCategory->get();
+        $this->payload_list['ListCategory']=$listCategory;
+        $results=successResult("List of Category",$this->payload_list);
+
+        return $results;
     }
-
 
     public function create(Request $request)
     {
-        //
         $validator=Validator::make($request->all(), [
             'name' => 'required'
         ]);
 
-        // echo Helpers::result();
         if($validator->fails()){
-            $result=array(
-                "success"=>false,
-                "messages"=>$validator->messages()->first(),
-                );
-
+            $results=errorResult($validator->messages()->first(),$this->payload_info);
         }else{
             $data_input = $request->all();
             $created=Category::create($data_input);        
-        
-            $result=array(
-                "success"=>true,
-                "row"=>$created
-                );
+            $this->payload_info['InfoCategory']=$created;
+            $results=successResult("Create Category Successfully",$this->payload_info);
         }
 
-        return response()->json($result);
+        return $results;
 
     }
 
     public function detail($id)
     {
-
         $row=Category::find($id);
-        if($row!=null){
-            $result=array(
-                'success'=>true,
-                'row'=>$row
-            );
-        }else{
-            $result=array(
-                'success'=>false,
-                'row'=>"Data Not Found"
-            );
-        }
-        return response()->json($result);
 
+        if(is_array($row)){
+           $this->payload_info['InfoCategory']=$row;
+           $results=successResult("Detail of Category",$this->payload_info);
+
+        }else{
+           $results=errorResult("Category not found",$this->payload_info);
+        }
+
+        return $results;
     }
 
     public function update(Request $request, Category $category)
@@ -82,87 +88,65 @@ class CategoryController extends Controller
             'name' => 'required'
         ]);
 
-        // echo Helpers::result();
         if($validator->fails()){
-            $result=array(
-                "success"=>false,
-                "messages"=>$validator->messages()->first(),
-                );
-
+               $results=errorResult($validator->messages()->first(),$this->payload_info);
         }else{
 
             $data_input = $request->all();
-            // $updated=$category->where('users_id',1)->where('id',request->input('id'))->update($data_input);        
             $category_id=$request->input('id');
-           $updated=Category::where('id', $category_id)
-          ->update($data_input);
+            $updated=Category::where('id', $category_id)
+                                  ->update($data_input);
 
             if($updated){
-                $result=array(
-                    "success"=>true,
-                    "row"=>$category->find($category_id)
-                    );
+               $this->payload_info['InfoCategory']=$category->find($category_id);
+               $results=successResult("Update Category Successfully",$this->payload_info);
+
             }else{
-                $result=array(
-                    "success"=>false,
-                    "messages"=>"Category Not Found"
-                    );
+               $results=errorResult("Update Category Failed",$this->payload_info);
             }
+
         }
 
-        return response()->json($result);
+        return $results;
     }
 
     public function delete($id)
     {
-  
+        $this->payload_info=array(
+            "InfoCategory"=> new \stdClass()
+            );
+        
         $category=Category::find($id);
         if($category!=null){
             $category->delete();
             if ($category->trashed()) {
-               $result=array(
-                        "success"=>true,
-                        "row"=>$category
-                        );
+               $this->payload_info['InfoCategory']=$category;
+               $results=successResult("Delete Category Successfully",$this->payload_info);
             }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Delete data failed"
-                        );
+               $results=errorResult("Delete Category Failed",$this->payload_info);
             }
         }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Data not found or already removed."
-                        );
-
+               $results=errorResult("Category not found or already removed.",$this->payload_info);
         }
-        return response()->json($result);
+
+        return $results;
     }
 
-    public function force_delete($id){
+    public function force_delete($id){        
+
         $category=Category::onlyTrashed()->find($id);
         ($category!==null) ? '' : $category=Category::find($id);;
         if($category!=null){
             if ($category->forceDelete()) {
-               $result=array(
-                        "success"=>true,
-                        "row"=>$category
-                        );
+               $this->payload['InfoCategory']=$category;
+               $results=successResult("Force Delete Category Successfully",$this->payload_info);
             }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Delete data failed"
-                        );
+               $results=errorResult("Force Delete Category Failed",$this->payload_info);
             }
         }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Data not found or already removed."
-                        );
-
+               $results=errorResult("Category not found or already removed.",$this->payload_info);
         }
-        return response()->json($result);
+        return $results;
     }
 
 }

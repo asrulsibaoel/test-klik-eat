@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    private $payload_info=array("InfoUser"=> null);
 
     public function register(Request $request)
     {
@@ -19,33 +20,25 @@ class UserController extends Controller
         ]);
 
         // echo Helpers::result();
-$result=array();
+        $result=array();
         if($validator->fails()){
-            $result=array(
-                "success"=>false,
-                "messages"=>$validator->messages()->first(),
-                );
-
+                   $results=errorResult($validator->messages()->first(),$this->payload_info);
         }else{
-
-
             $data_input = $request->all();
             $data_input['password']=bcrypt($request->input('password')); 
-          
-            $userCreated=User::create($data_input);        
+            $user_created=User::create($data_input);        
         
-            $result=array(
-                "success"=>true,
-                "row"=>$userCreated
-                );
+            $this->payload_info['InfoUser']=$user_created;
+            $results=successResult("Register User Successfully",$this->payload_info);
         }
 
-        return response()->json($result);
-
+        return $results;
     }
 
     public function login(Request $request)
     {
+        $this->payload_info['Token']="";
+
          $validator=Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required'
@@ -53,48 +46,44 @@ $result=array();
 
         // echo Helpers::result();
         if($validator->fails()){
-            $result=array(
-                "success"=>false,
-                "messages"=>$validator->messages()->first(),
-                );
-
+           $results=errorResult($validator->messages()->first(),$this->payload_info);
         }else{
             $email=$request->input('email');
             $password=$request->input('password');
             $authenticated=Auth::attempt(['email' => $email, 'password' => $password]);
 
             if (!$authenticated) {
-            
-                $result=array(
-                    "success"=>false,
-                    "messages"=>"email and password does not match",
-                    );
-
+                 $results=errorResult("Failed: email and password does not match",$this->payload_info);
             }else{
                 $userInfo=Auth::user();
-                $token = $userInfo->createToken('personal-token#'.$userInfo->name)->accessToken;
-                $detailUser=$userInfo;
-                $detailUser['token']=$token;
+                try {
+                    $token = $userInfo->createToken('personal-token#'.$userInfo->name)->accessToken;
 
-                $result=array(
-                    "success"=>true,
-                    "row"=>$detailUser
-                    );
+                    $this->payload_info['InfoUser']=$userInfo;
+                    $this->payload_info['Token']=$token;
+
+                    $results=successResult("Login User Successfully",$this->payload_info);
+                } catch (Exception $e) {
+                   $results=errorResult("Generate Token Failed",$this->payload_info);
+                }
             }
         }
 
-        return response()->json($result);
+        return $results;
 
     }
 
     public function profile(Request $request)
     {
-        $result=array(
-            'success'=>true,
-            'row'=>$request->user()
-        );
+        if(Auth::id()){
+        $row=Auth::user();
+           $this->payload_info['InfoUser']=$row;
+           $results=successResult("Detail of User",$this->payload_info);
+        }else{
+           $results=errorResult("User not found",$this->payload_info);
+        }
 
-        return response()->json($result);
+        return $results;
     }
 
    public function edit_profile(Request $request)
@@ -106,13 +95,8 @@ $result=array();
 
         // echo Helpers::result();
         if($validator->fails()){
-            $result=array(
-                "success"=>false,
-                "messages"=>$validator->messages()->first(),
-                );
-
+               $results=errorResult($validator->messages()->first(),$this->payload_info);
         }else{
-
             $data_input = $request->all();
             if($request->input('password')!=""){
                 $data_input['password']=bcrypt($request->input('password')); 
@@ -126,21 +110,14 @@ $result=array();
 
             $isUpdated=Auth::user()->update($data_input);        
             if($isUpdated){
-                $result=array(
-                    "success"=>true,
-                    "row"=>$request->user()
-                    );
+               $this->payload_info['InfoCategory']=$category->find($category_id);
+               $results=successResult("Update User Successfully",$this->payload_info);
             }else{
-                $result=array(
-                    "success"=>false,
-                    "messages"=>"Failed Update Profile"
-                    );
-
+               $results=errorResult("Update Profile Failed",$this->payload_info);
             }
         }
 
- 
-        return response()->json($result);
+        return $results;
     }
  
 }

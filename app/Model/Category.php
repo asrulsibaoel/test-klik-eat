@@ -12,7 +12,8 @@ class Category extends Model
     
     protected $dates = ['deleted_at'];
     //
-    protected $fillable=['name'];
+    public $fillable=['id','name'];
 
+    public $hidden=['created_at','updated_at','deleted_at'];
 }
 

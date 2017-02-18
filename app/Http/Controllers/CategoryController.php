@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {   
-    private $payload_list=array("ListCategory"=> null);
-    private $payload_info=array("InfoCategory"=> null);
+    private $payload_list=array("list_category"=> null);
+    private $payload_info=array("category"=> null);
 
     public function data(Request $request)
     {
@@ -41,8 +41,8 @@ class CategoryController extends Controller
         }
 
 
-        $listCategory=$queryCategory->get();
-        $this->payload_list['ListCategory']=$listCategory;
+        $list_category=$queryCategory->get();
+        $this->payload_list['list_category']=$list_category;
         $results=successResult("List of Category",$this->payload_list);
 
         return $results;
@@ -59,7 +59,7 @@ class CategoryController extends Controller
         }else{
             $data_input = $request->all();
             $created=Category::create($data_input);        
-            $this->payload_info['InfoCategory']=$created;
+            $this->payload_info['category']=$created;
             $results=successResult("Create Category Successfully",$this->payload_info);
         }
 
@@ -72,7 +72,7 @@ class CategoryController extends Controller
         $row=Category::find($id);
 
         if(is_array($row)){
-           $this->payload_info['InfoCategory']=$row;
+           $this->payload_info['category']=$row;
            $results=successResult("Detail of Category",$this->payload_info);
 
         }else{
@@ -98,7 +98,7 @@ class CategoryController extends Controller
                                   ->update($data_input);
 
             if($updated){
-               $this->payload_info['InfoCategory']=$category->find($category_id);
+               $this->payload_info['category']=$category->find($category_id);
                $results=successResult("Update Category Successfully",$this->payload_info);
 
             }else{
@@ -113,14 +113,14 @@ class CategoryController extends Controller
     public function delete($id)
     {
         $this->payload_info=array(
-            "InfoCategory"=> new \stdClass()
+            "category"=> new \stdClass()
             );
         
         $category=Category::find($id);
         if($category!=null){
             $category->delete();
             if ($category->trashed()) {
-               $this->payload_info['InfoCategory']=$category;
+               $this->payload_info['category']=$category;
                $results=successResult("Delete Category Successfully",$this->payload_info);
             }else{
                $results=errorResult("Delete Category Failed",$this->payload_info);
@@ -138,7 +138,7 @@ class CategoryController extends Controller
         ($category!==null) ? '' : $category=Category::find($id);;
         if($category!=null){
             if ($category->forceDelete()) {
-               $this->payload['InfoCategory']=$category;
+               $this->payload['category']=$category;
                $results=successResult("Force Delete Category Successfully",$this->payload_info);
             }else{
                $results=errorResult("Force Delete Category Failed",$this->payload_info);

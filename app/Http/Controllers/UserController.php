@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    private $payload_info=array("InfoUser"=> null);
+    private $payload_info=array("user"=> null);
 
     public function register(Request $request)
     {
@@ -28,7 +28,7 @@ class UserController extends Controller
             $data_input['password']=bcrypt($request->input('password')); 
             $user_created=User::create($data_input);        
         
-            $this->payload_info['InfoUser']=$user_created;
+            $this->payload_info['user']=User::find($user_created->id);
             $results=successResult("Register User Successfully",$this->payload_info);
         }
 
@@ -59,7 +59,7 @@ class UserController extends Controller
                 try {
                     $token = $userInfo->createToken('personal-token#'.$userInfo->name)->accessToken;
 
-                    $this->payload_info['InfoUser']=$userInfo;
+                    $this->payload_info['user']=$userInfo;
                     $this->payload_info['Token']=$token;
 
                     $results=successResult("Login User Successfully",$this->payload_info);
@@ -77,7 +77,7 @@ class UserController extends Controller
     {
         if(Auth::id()){
         $row=Auth::user();
-           $this->payload_info['InfoUser']=$row;
+           $this->payload_info['user']=$row;
            $results=successResult("Detail of User",$this->payload_info);
         }else{
            $results=errorResult("User not found",$this->payload_info);

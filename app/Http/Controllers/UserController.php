@@ -60,7 +60,7 @@ class UserController extends Controller
                     $token = $userInfo->createToken('personal-token#'.$userInfo->name)->accessToken;
 
                     $this->payload_info['user']=$userInfo;
-                    $this->payload_info['Token']=$token;
+                    $this->payload_info['token']=$token;
 
                     $results=successResult("Login User Successfully",$this->payload_info);
                 } catch (Exception $e) {

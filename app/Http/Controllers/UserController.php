@@ -37,7 +37,7 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
-        $this->payload_info['Token']="";
+        $this->payload_info['token']="";
 
          $validator=Validator::make($request->all(), [
             'email' => 'required|email',

@@ -19,7 +19,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 /*------------------------------------
 	CRUD Category
 ------------------------------------*/
-    Route::any('/category', 'CategoryController@data');
+    Route::get('/category', 'CategoryController@data');
     Route::get('/category/{id}', 'CategoryController@detail');
     Route::post('/category/create', 'CategoryController@create');
     Route::post('/category/update', 'CategoryController@update');
@@ -29,7 +29,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 /*------------------------------------
 	CRUD Product
 ------------------------------------*/
-    Route::any('/product', 'ProductController@data');
+    Route::get('/product', 'ProductController@data');
     Route::get('/product/{id}', 'ProductController@detail');
     Route::post('/product/create', 'ProductController@create');
     Route::post('/product/update', 'ProductController@update');
@@ -39,7 +39,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 /*------------------------------------
 	CRUD Chats Room
 ------------------------------------*/
-    Route::any('/chats_room', 'ChatsRoomController@data');
+    Route::get('/chats_room', 'ChatsRoomController@data');
     Route::get('/chats_room/{id}', 'ChatsRoomController@detail');
     Route::post('/chats_room/create', 'ChatsRoomController@create');
     Route::post('/chats_room/update', 'ChatsRoomController@update');
@@ -49,7 +49,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 /*------------------------------------
 	CRUD Chat
 ------------------------------------*/
-    Route::any('/chat', 'ChatController@data');
+    Route::get('/chat', 'ChatController@data');
     Route::get('/chat/{id}', 'ChatController@detail');
     Route::post('/chat/create', 'ChatController@create');
     Route::post('/chat/update', 'ChatController@update');
@@ -59,7 +59,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 /*------------------------------------
 	CRUD Comment
 ------------------------------------*/
-    Route::any('/comment', 'CommentController@data');
+    Route::get('/comment', 'CommentController@data');
     Route::get('/comment/{id}', 'CommentController@detail');
     Route::post('/comment/create', 'CommentController@create');
     Route::post('/comment/update', 'CommentController@update');
@@ -69,7 +69,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 /*------------------------------------
 	CRUD Transaction
 ------------------------------------*/
-    Route::any('/transaction', 'TransactionController@data');
+    Route::get('/transaction', 'TransactionController@data');
     Route::get('/transaction/detail/{id}', 'TransactionsDetailController@data');
     Route::get('/transaction/{id}', 'TransactionController@detail');
     Route::post('/transaction/create', 'TransactionController@create');
@@ -80,7 +80,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 /*------------------------------------
 	CRUD Transactions Detail
 ------------------------------------*/
-    // Route::any('/transactions_detail', 'TransactionsDetailController@data');
+    Route::get('/transactions_detail', 'TransactionsDetailController@data');
     Route::get('/transactions_detail/{id}', 'TransactionsDetailController@detail');
     Route::post('/transactions_detail/create', 'TransactionsDetailController@create');
     // Route::post('/transactions_detail/update', 'TransactionsDetailController@update');

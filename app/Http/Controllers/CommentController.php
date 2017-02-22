@@ -8,169 +8,141 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
-{
-
+{   
+    private $payload_list=array("list_comment"=> null,'page'=>1);
+    private $payload_info=array("comment"=> null);
+    private $relation_table=array('product','user');
     public function data(Request $request)
     {
-  /*
-    // debugging Queyr
-  \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
-        var_dump($query->sql);
-    });
-*/
-        $data=Comment::all();
-        $result=array(
-            'success'=>true,
-            'data'=>$data
-        );
+      
+/*      \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
+            var_dump($query->sql);
+        });
+*/    
+        $comment=new Comment();
+        $option_list=optionList($comment,$request,$this->relation_table);
+        
+        $this->payload_list['list_comment']=$option_list['data'];
+        $this->payload_list['page']=$option_list['page'];
 
-        return response()->json($result);
+        if(count($option_list['data'])>0){
+            $results=successResult("List of Comment",$this->payload_list);
+        }else{
+            $results=errorResult("Comment Not Found",$this->payload_list);
+        }
 
+        return $results;
     }
-
 
     public function create(Request $request)
     {
-        //
-        $validator=Validator::make($request->all(), [
+
+
+         $validator=Validator::make($request->all(), [
             'messages' => 'required',
             'products_id' => 'required',
         ]);
 
-        // echo Helpers::result();
-        if($validator->fails()){
-            $result=array(
-                "success"=>false,
-                "messages"=>$validator->messages()->first(),
-                );
 
+        
+
+        if($validator->fails()){
+            $results=errorResult($validator->messages()->first(),$this->payload_info);
         }else{
             $data_input = $request->all();
             $data_input['users_id']=Auth::id();
             $created=Comment::create($data_input);        
-        
-            $result=array(
-                "success"=>true,
-                "row"=>$created
-                );
+            $info_comment=Comment::with($this->relation_table)->find($created->id);
+            $this->payload_info['comment']=$info_comment;
+            $results=successResult("Create Comment Successfully",$this->payload_info);
         }
 
-        return response()->json($result);
-
+        return $results;
     }
 
     public function detail($id)
     {
+        $row=Comment::with($this->relation_table)->find($id);
 
-        $row=Comment::find($id);
-                if($row!=null){
-            $result=array(
-                'success'=>true,
-                'row'=>$row
-            );
+        if(count($row)>0){
+           $this->payload_info['comment']=$row;
+           $results=successResult("Detail of Comment",$this->payload_info);
+
         }else{
-            $result=array(
-                'success'=>false,
-                'row'=>"Data Not Found"
-            );
+           $results=errorResult("Comment not found",$this->payload_info);
         }
 
-
-        return response()->json($result);
-
+        return $results;
     }
 
     public function update(Request $request, Comment $comment)
     {
+
         $validator=Validator::make($request->all(), [
             'messages' => 'required',
             'products_id' => 'required',
         ]);
 
-        // echo Helpers::result();
-        if($validator->fails()){
-            $result=array(
-                "success"=>false,
-                "messages"=>$validator->messages()->first(),
-                );
 
+        if($validator->fails()){
+               $results=errorResult($validator->messages()->first(),$this->payload_info);
         }else{
 
             $data_input = $request->all();
-            // $updated=$comment->where('users_id',1)->where('id',request->input('id'))->update($data_input);        
-            $users_id=Auth::id();
-            $comments_id=$request->input('id');
-           $updated=Comment::where('users_id',$users_id)
-          ->where('id', $comments_id)
-          ->update($data_input);
+            $comment_id=$request->input('id');
+            $updated=Comment::where('id', $comment_id)
+                                  ->update($data_input);
 
             if($updated){
-                $result=array(
-                    "success"=>true,
-                    "row"=>$comment->find($comments_id)
-                    );
+               $this->payload_info['comment']=Comment::with($this->relation_table)->find($comment_id);
+               $results=successResult("Update Comment Successfully",$this->payload_info);
+
             }else{
-                $result=array(
-                    "success"=>false,
-                    "messages"=>"Comment Not Found"
-                    );
+               $results=errorResult("Update Comment Failed",$this->payload_info);
             }
+
         }
 
-        return response()->json($result);
+        return $results;
     }
 
     public function delete($id)
     {
-
-  
-        $comment=Comment::where('users_id',Auth::id())->find($id);
+        $this->payload_info=array(
+            "comment"=> new \stdClass()
+            );
+        
+        $comment=Comment::with($this->relation_table)->find($id);
         if($comment!=null){
             $comment->delete();
             if ($comment->trashed()) {
-               $result=array(
-                        "success"=>true,
-                        "row"=>$comment
-                        );
+               $this->payload_info['comment']=$comment;
+               $results=successResult("Delete Comment Successfully",$this->payload_info);
             }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Delete data failed"
-                        );
+               $results=errorResult("Delete Comment Failed",$this->payload_info);
             }
         }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Data not found or already removed."
-                        );
-
+               $results=errorResult("Comment not found or already removed.",$this->payload_info);
         }
-        return response()->json($result);
+
+        return $results;
     }
 
-    public function force_delete($id){
-        $comment=Comment::onlyTrashed()->find($id);
-        ($comment!==null) ? '' : $comment=Comment::find($id);;
+    public function force_delete($id){        
+
+        $comment=Comment::onlyTrashed()->with($this->relation_table)->find($id);
+        ($comment!==null) ? '' : $comment=Comment::with($this->relation_table)->find($id);;
         if($comment!=null){
             if ($comment->forceDelete()) {
-               $result=array(
-                        "success"=>true,
-                        "row"=>$comment
-                        );
+               $this->payload['comment']=$comment;
+               $results=successResult("Force Delete Comment Successfully",$this->payload_info);
             }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Delete data failed"
-                        );
+               $results=errorResult("Force Delete Comment Failed",$this->payload_info);
             }
         }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Data not found or already removed."
-                        );
-
+               $results=errorResult("Comment not found or already removed.",$this->payload_info);
         }
-        return response()->json($result);
+        return $results;
     }
 
 }

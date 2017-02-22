@@ -8,171 +8,144 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
-{
-
-
+{   
+    private $payload_list=array("list_transaction"=> null,'page'=>1);
+    private $payload_info=array("transaction"=> null);
+    private $relation_table=array('user');
     public function data(Request $request)
     {
-  /*
-    // debugging Queyr
-  \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
-        var_dump($query->sql);
-    });
-*/
-        $data=Transaction::all();
-        $result=array(
-            'success'=>true,
-            'data'=>$data
-        );
+      
+/*      \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
+            var_dump($query->sql);
+        });
+*/    
+        $transaction=new Transaction();
+        $option_list=optionList($transaction,$request,$this->relation_table);
+        
+        $this->payload_list['list_transaction']=$option_list['data'];
+        $this->payload_list['page']=$option_list['page'];
 
-        return response()->json($result);
+        if(count($option_list['data'])>0){
+            $results=successResult("List of Transaction",$this->payload_list);
+        }else{
+            $results=errorResult("Transaction Not Found",$this->payload_list);
+        }
 
+        return $results;
     }
-
 
     public function create(Request $request)
     {
-        //
-        $validator=Validator::make($request->all(), [
+
+
+         $validator=Validator::make($request->all(), [
             'total' => 'required',
 
         ]);
+        
 
-        // echo Helpers::result();
         if($validator->fails()){
-            $result=array(
-                "success"=>false,
-                "messages"=>$validator->messages()->first(),
-                );
-
+            $results=errorResult($validator->messages()->first(),$this->payload_info);
         }else{
             $data_input = $request->all();
             $data_input['users_id']=Auth::id();
             $transID="TRX".date("ymdhis").rand(0,10);
             $data_input['id']=$transID;
+
             $created=Transaction::create($data_input);        
-        
-            $result=array(
-                "success"=>true,
-                "row"=>$created
-                );
+            $info_transaction=Transaction::with($this->relation_table)->find($created->id);
+            $this->payload_info['transaction']=$info_transaction;
+            $results=successResult("Create Transaction Successfully",$this->payload_info);
         }
 
-        return response()->json($result);
-
+        return $results;
     }
 
     public function detail($id)
     {
+        $row=Transaction::with($this->relation_table)->find($id);
 
-        $row=Transaction::find($id);
-                if($row!=null){
-            $result=array(
-                'success'=>true,
-                'row'=>$row
-            );
+        if(count($row)>0){
+           $this->payload_info['transaction']=$row;
+           $results=successResult("Detail of Transaction",$this->payload_info);
+
         }else{
-            $result=array(
-                'success'=>false,
-                'row'=>"Data Not Found"
-            );
+           $results=errorResult("Transaction not found",$this->payload_info);
         }
 
-
-        return response()->json($result);
-
+        return $results;
     }
 
     public function update(Request $request, Transaction $transaction)
     {
-        $validator=Validator::make($request->all(), [
+
+       $validator=Validator::make($request->all(), [
+            'id' => 'required',
             'total' => 'required',
         ]);
 
-        // echo Helpers::result();
-        if($validator->fails()){
-            $result=array(
-                "success"=>false,
-                "messages"=>$validator->messages()->first(),
-                );
 
+        if($validator->fails()){
+               $results=errorResult($validator->messages()->first(),$this->payload_info);
         }else{
 
             $data_input = $request->all();
-            // $updated=$transaction->where('users_id',1)->where('id',request->input('id'))->update($data_input);        
-            $users_id=Auth::id();
+              $users_id=Auth::id();
             $transactions_id=$request->input('id');
            $updated=Transaction::where('users_id',$users_id)
           ->where('id', $transactions_id)
           ->update($data_input);
 
             if($updated){
-                $result=array(
-                    "success"=>true,
-                    "row"=>$transaction->find($transactions_id)
-                    );
+               $this->payload_info['transaction']=Transaction::with($this->relation_table)->find($transaction_id);
+               $results=successResult("Update Transaction Successfully",$this->payload_info);
+
             }else{
-                $result=array(
-                    "success"=>false,
-                    "messages"=>"Transaction Not Found"
-                    );
+               $results=errorResult("Update Transaction Failed",$this->payload_info);
             }
+
         }
 
-        return response()->json($result);
+        return $results;
     }
 
     public function delete($id)
     {
-
-  
-        $transaction=Transaction::where('users_id',Auth::id())->find($id);
+        $this->payload_info=array(
+            "transaction"=> new \stdClass()
+            );
+        
+        $transaction=Transaction::with($this->relation_table)->find($id);
         if($transaction!=null){
             $transaction->delete();
             if ($transaction->trashed()) {
-               $result=array(
-                        "success"=>true,
-                        "row"=>$transaction
-                        );
+               $this->payload_info['transaction']=$transaction;
+               $results=successResult("Delete Transaction Successfully",$this->payload_info);
             }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Delete data failed"
-                        );
+               $results=errorResult("Delete Transaction Failed",$this->payload_info);
             }
         }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Data not found or already removed."
-                        );
-
+               $results=errorResult("Transaction not found or already removed.",$this->payload_info);
         }
-        return response()->json($result);
+
+        return $results;
     }
 
-    public function force_delete($id){
-        $transaction=Transaction::onlyTrashed()->find($id);
-        ($transaction!==null) ? '' : $transaction=Transaction::find($id);;
+    public function force_delete($id){        
+
+        $transaction=Transaction::onlyTrashed()->with($this->relation_table)->find($id);
+        ($transaction!==null) ? '' : $transaction=Transaction::with($this->relation_table)->find($id);;
         if($transaction!=null){
             if ($transaction->forceDelete()) {
-               $result=array(
-                        "success"=>true,
-                        "row"=>$transaction
-                        );
+               $this->payload['transaction']=$transaction;
+               $results=successResult("Force Delete Transaction Successfully",$this->payload_info);
             }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Delete data failed"
-                        );
+               $results=errorResult("Force Delete Transaction Failed",$this->payload_info);
             }
         }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Data not found or already removed."
-                        );
-
+               $results=errorResult("Transaction not found or already removed.",$this->payload_info);
         }
-        return response()->json($result);
+        return $results;
     }
 
 }

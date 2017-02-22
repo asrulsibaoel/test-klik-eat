@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {   
-    private $payload_list=array("list_category"=> null);
+    private $payload_list=array("list_category"=> null,'page'=>1);
     private $payload_info=array("category"=> null);
 
     public function data(Request $request)
@@ -20,31 +20,16 @@ class CategoryController extends Controller
         });
 */    
         $category=new Category();
-        $fillable=$category->fillable;
+        $option_list=optionList($category,$request);
+        
+        $this->payload_list['list_category']=$option_list['data'];
+        $this->payload_list['page']=$option_list['page'];
 
-        $queryCategory=$category;
-
-        // searching
-        if($request->input('q')){
-            $q=$request->input('q');
-            if(is_array($fillable))
-                foreach ($fillable as $field) {
-                    $queryCategory=$queryCategory->orWhere($field,'like',$q.'%');
-                }
-        }
-
-        // sorting
-        if($request->input('sortby')){
-            $sortby=$request->input('sortby');
-            $order=($request->input('order')) ? $request->input('order') : 'asc';
-                    $queryCategory=$queryCategory->orderBy($sortby,$order);
-        }
-
-
-        $list_category=$queryCategory->get();
-        $this->payload_list['list_category']=$list_category;
-        $results=successResult("List of Category",$this->payload_list);
-
+       if(count($option_list['data'])>0){
+            $results=successResult("List of Category",$this->payload_list);
+       }else{
+            $results=errorResult("Category Not Found",$this->payload_list);
+       }
         return $results;
     }
 
@@ -71,7 +56,7 @@ class CategoryController extends Controller
     {
         $row=Category::find($id);
 
-        if(is_array($row)){
+        if(count($row)>0){
            $this->payload_info['category']=$row;
            $results=successResult("Detail of Category",$this->payload_info);
 

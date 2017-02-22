@@ -8,77 +8,70 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
-{
-
+{   
+    private $payload_list=array("list_product"=> null,'page'=>1);
+    private $payload_info=array("product"=> null);
+    private $relation_table=array('category','user');
     public function data(Request $request)
     {
-  /*
-    // debugging Queyr
-  \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
-        var_dump($query->sql);
-    });
-*/
-        $data=Product::all();
-        $result=array(
-            'success'=>true,
-            'data'=>$data
-        );
+      
+/*      \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
+            var_dump($query->sql);
+        });
+*/    
+        $product=new Product();
+        $option_list=optionList($product,$request,$this->relation_table);
+        
+        $this->payload_list['list_product']=$option_list['data'];
+        $this->payload_list['page']=$option_list['page'];
 
-        return response()->json($result);
+        if(count($option_list['data'])>0){
+            $results=successResult("List of Product",$this->payload_list);
+        }else{
+            $results=errorResult("Product Not Found",$this->payload_list);
+        }
 
+        return $results;
     }
-
 
     public function create(Request $request)
     {
-        //
+
+
         $validator=Validator::make($request->all(), [
             'name' => 'required',
             'price' => 'required',
             'categories_id' => 'required',
         ]);
+        
 
-        // echo Helpers::result();
         if($validator->fails()){
-            $result=array(
-                "success"=>false,
-                "messages"=>$validator->messages()->first(),
-                );
-
+            $results=errorResult($validator->messages()->first(),$this->payload_info);
         }else{
             $data_input = $request->all();
             $data_input['users_id']=Auth::id();
             $created=Product::create($data_input);        
-        
-            $result=array(
-                "success"=>true,
-                "row"=>$created
-                );
+            $info_product=Product::with($this->relation_table)->find($created->id);
+            $this->payload_info['product']=$info_product;
+            $results=successResult("Create Product Successfully",$this->payload_info);
         }
 
-        return response()->json($result);
-
+        return $results;
     }
 
     public function detail($id)
     {
+        $row=Product::with($this->relation_table)->find($id);
 
-        $row=Product::find($id);
-                if($row!=null){
-            $result=array(
-                'success'=>true,
-                'row'=>$row
-            );
+        if(count($row)>0){
+           $this->payload_info['product']=$row;
+           $results=successResult("Detail of Product",$this->payload_info);
+
         }else{
-            $result=array(
-                'success'=>false,
-                'row'=>"Data Not Found"
-            );
+           $results=errorResult("Product not found",$this->payload_info);
         }
 
-
-        return response()->json($result);
-
+        return $results;
     }
 
     public function update(Request $request, Product $product)
@@ -89,90 +82,65 @@ class ProductController extends Controller
             'categories_id' => 'required',
         ]);
 
-        // echo Helpers::result();
         if($validator->fails()){
-            $result=array(
-                "success"=>false,
-                "messages"=>$validator->messages()->first(),
-                );
-
+               $results=errorResult($validator->messages()->first(),$this->payload_info);
         }else{
 
             $data_input = $request->all();
-            // $updated=$product->where('users_id',1)->where('id',request->input('id'))->update($data_input);        
-            $users_id=Auth::id();
-            $products_id=$request->input('id');
-           $updated=Product::where('users_id',$users_id)
-          ->where('id', $products_id)
-          ->update($data_input);
+            $product_id=$request->input('id');
+            $updated=Product::where('id', $product_id)
+                                  ->update($data_input);
 
             if($updated){
-                $result=array(
-                    "success"=>true,
-                    "row"=>$product->find($products_id)
-                    );
+               $this->payload_info['product']=Product::with($this->relation_table)->find($product_id);
+               $results=successResult("Update Product Successfully",$this->payload_info);
+
             }else{
-                $result=array(
-                    "success"=>false,
-                    "messages"=>"Product Not Found or Not allowed for updated this product"
-                    );
+               $results=errorResult("Update Product Failed",$this->payload_info);
             }
+
         }
 
-        return response()->json($result);
+        return $results;
     }
 
     public function delete($id)
     {
-
-  
-        $product=Product::where('users_id',Auth::id())->find($id);
+        $this->payload_info=array(
+            "product"=> new \stdClass()
+            );
+        
+        $product=Product::with($this->relation_table)->find($id);
         if($product!=null){
             $product->delete();
             if ($product->trashed()) {
-               $result=array(
-                        "success"=>true,
-                        "row"=>$product
-                        );
+               $this->payload_info['product']=$product;
+               $results=successResult("Delete Product Successfully",$this->payload_info);
             }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Delete data failed"
-                        );
+               $results=errorResult("Delete Product Failed",$this->payload_info);
             }
         }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Data not found or already removed."
-                        );
-
+               $results=errorResult("Product not found or already removed.",$this->payload_info);
         }
-        return response()->json($result);
+
+        return $results;
     }
 
-    public function force_delete($id){
-        $product=Product::onlyTrashed()->find($id);
-        ($product!==null) ? '' : $product=Product::find($id);;
+    public function force_delete($id){        
+
+        $product=Product::onlyTrashed()->with($this->relation_table)->find($id);
+        ($product!==null) ? '' : $product=Product::with($this->relation_table)->find($id);;
         if($product!=null){
             if ($product->forceDelete()) {
-               $result=array(
-                        "success"=>true,
-                        "row"=>$product
-                        );
+               $this->payload['product']=$product;
+               $results=successResult("Force Delete Product Successfully",$this->payload_info);
             }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Delete data failed"
-                        );
+               $results=errorResult("Force Delete Product Failed",$this->payload_info);
             }
         }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Data not found or already removed."
-                        );
-
+               $results=errorResult("Product not found or already removed.",$this->payload_info);
         }
-        return response()->json($result);
+        return $results;
     }
 
 }

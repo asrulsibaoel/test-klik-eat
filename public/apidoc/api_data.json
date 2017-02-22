@@ -74,28 +74,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about user</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Edit User (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": 1,\n    \"name\": \"Hery kuswandi\",\n    \"email\": \"hery@gmail.com\",\n    \"fb_token\": null,\n    \"gender\": null,\n    \"birtdate\": null,\n    \"phone\": \"084737437434\",\n    \"address\": null,\n    \"photo\": null,\n    \"created_at\": \"2017-02-09 13:55:50\",\n    \"updated_at\": \"2017-02-09 13:55:50\",\n    \"deleted_at\": null\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Edit User Succesfully\",\n  \"data\": {\n    \"user\": {\n      \"id\": 1,\n      \"name\": \"Hery kuswandi\",\n      \"email\": \"hery@gmail.com\",\n      \"fb_token\": null,\n      \"gender\": null,\n      \"birtdate\": null,\n      \"phone\": \"084737437434\",\n      \"address\": null,\n      \"photo\": null,\n      \"created_at\": \"2017-02-09 13:55:50\"\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -104,23 +86,50 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The name field is required.\"\n}",
+          "content": "\n{\n  \"error\": true,\n  \"message\": \"The name field is required.\",\n  \"data\": {\n    \"user\": {}\n  }\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: User NotFound",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"User Not Found\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"User Not Found.\",\n  \"data\": {\n    \"user\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/account.edit_profile.js",
-    "groupTitle": "Account"
+    "groupTitle": "Account",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "get",
@@ -135,28 +144,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about user</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Profil User (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": 1,\n    \"name\": \"Hery kuswandi\",\n    \"email\": \"hery@gmail.com\",\n    \"fb_token\": null,\n    \"gender\": null,\n    \"birtdate\": null,\n    \"phone\": \"084737437434\",\n    \"address\": null,\n    \"photo\": null,\n    \"created_at\": \"2017-02-09 13:55:50\",\n    \"updated_at\": \"2017-02-09 13:55:50\",\n    \"deleted_at\": null\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Detail of User\",\n  \"data\": {\n    \"user\": {\n      \"id\": 1,\n      \"name\": \"Hery kuswandi\",\n      \"email\": \"hery@gmail.com\",\n      \"fb_token\": null,\n      \"gender\": null,\n      \"birtdate\": null,\n      \"phone\": \"084737437434\",\n      \"address\": null,\n      \"photo\": null,\n      \"created_at\": \"2017-02-09 13:55:50\"\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -165,18 +156,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: User NotFound",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"User Not Found\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"User Not Found.\",\n  \"data\": {\n    \"user\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/account.profile.js",
-    "groupTitle": "Account"
+    "groupTitle": "Account",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "post",
@@ -211,35 +229,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>object as information about user login</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row.token",
-            "description": "<p><i style=\"color:red;\">field token in row object it's an important.</i> please keep dan remember this token. for next request, you need define this token in header information for authentication.</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Login User (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": 1,\n    \"name\": \"Hery kuswandi\",\n    \"email\": \"hery@gmail.com\",\n    \"fb_token\": null,\n    \"gender\": null,\n    \"birtdate\": null,\n    \"phone\": \"084737437434\",\n    \"address\": null,\n    \"photo\": null,\n    \"created_at\": \"2017-02-09 13:55:50\",\n    \"updated_at\": \"2017-02-09 13:55:50\",\n    \"deleted_at\": null,\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjczNjQ4N2EyNGVlYWI3MDdkM2MwMjc1MGE0Y2E3NTIxMjIyNmMxMzJmNzQxOTgwMDQyMzQyYzBjNWJkNzQzMjYzZjM4NjY0ZmVhYjc2NjM1In0.eyJhdWQiOiIxIiwianRpIjoiNzM2NDg3YTI0ZWVhYjcwN2QzYzAyNzUwYTRjYTc1MjEyMjI2YzEzMmY3NDE5ODAwNDIzNDJjMGM1YmQ3NDMyNjNmMzg2NjRmZWFiNzY2MzUiLCJpYXQiOjE0ODY4ODU4OTcsIm5iZiI6MTQ4Njg4NTg5NywiZXhwIjoxNTE4NDIxODk3LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.qYKUe46ctd50ufO6QzVa7KG1TgrJ_mt_oJEEP7docECCxZ6GCLffiPEedP1WDqev8eEYwq0MGf832iE5BcV99YnSIbRm_LdHtQKfC124epjvpWRI0aCFK6N0yaC88rFhBuXHkRt0OjVGf0Sq5DmhHoeePyCpO0jKKRoRVhdgVOObeRWT-747nWAF6VOMo7kHj2JK4zfA1I6habdUOolWlbrMUJLDqcqEwlRsBtXnqPS66iUeDodE2eSTaYti1SS4lKkWgNexV1jwEmWj_QZ5059P3JpfQCv5W1r9LHQeN6LpSLLJnypQJlQg3EuckGUT8Aiu7IS_BkFNaj20l1d3XAJdne5gyNIBS-n6psXRplUQyiXO-RybnGsyxBnPQHzatWpvhpG7hwfCGxR7Kf9hMexWhCChVD4-QPQo09zL1bOgd7HV1is0AS7y9YNwq5vN9qeShEh9SmKvO8qfpa2n86gf_nz_l6ogRxYfY-5I6mo66zt6Dk5i7sNsLkuOodS5dTNfTGpTmwokYJCMwecItSvTUg8MLQfG0A4gACofQkCUowcNvLxXhGR4XVZ-2xdysLtsswfYQ3Vdr2P9iL6KGUHbNINSVon_-0ivoWT3foW7fGmG0SLsxpsy2Kwp1kgHbZ69qBL0rXgY_yZ8iurFxAyAyLyXGwK99XNzfoPF1UI\"\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Login User Successfully\",\n  \"data\": {\n    \"user\": {\n      \"id\": 1,\n      \"name\": \"Hery kuswandi\",\n      \"email\": \"hery@gmail.com\",\n      \"fb_token\": null,\n      \"gender\": null,\n      \"birtdate\": null,\n      \"phone\": \"084737437434\",\n      \"address\": null,\n      \"photo\": null,\n      \"created_at\": \"2017-02-09 13:55:50\"\n    },\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImQ1OGE0NmQyZGZhNzJhNzkwYTQ1ZWE3MjI0YTk4YzRmNDYzNGJkZjFhMjQ0YTU5NjU2ZWFmODU5YzdmZjE3ZWFlY2EyMzAzZWRjOWI0NGY3In0.eyJhdWQiOiIxIiwianRpIjoiZDU4YTQ2ZDJkZmE3MmE3OTBhNDVlYTcyMjRhOThjNGY0NjM0YmRmMWEyNDRhNTk2NTZlYWY4NTljN2ZmMTdlYWVjYTIzMDNlZGM5YjQ0ZjciLCJpYXQiOjE0ODc2ODI5OTYsIm5iZiI6MTQ4NzY4Mjk5NiwiZXhwIjoxNTE5MjE4OTk2LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.imflCCtJkDwqPxc8eR-wQt3xbki475mCKYnzj7CqYuQnS4F3mXmIk2igkSQC1wF_jhKQpZvC8ht9m0yRoRYoiNsPLyYWrT3rlUMnwNFP6nZo6e-cJ5YOxkWGOrI61k4MTViwuqlwJmxn7ROTDnb8fgBhM9Ci03jkqdGKf0AjGOUD9QAA7zVkOB75S5GFnYrkFeLXAvWSXJNWb5iQIOhbDLhfWABCSDiZdqp1BjWdeTqzftsvItgpbENIuxEVf3jiPhHVrm5JOnBo6QiHR4CgEP0ycC2AgvPiWzTlYs-IG16iPbkKTu9aEjIDY0X3RAY8ExAPGvAl3ZQUP5ZzYw5_4lZfWZIObn8Dzap15iaDOxFAoDQR4176DlaLqF6VbA2Xc86lzDfMertkXnIEbnzfSIBZt3pSU0ZXxxMUGfwBEjAqhNcDJ6_9xyyyaQE66DdhK5OUlnhnjKeggV007iuhsVEkVfzML_uI1c5odqfHyT_pO9-dvNK8Smu9lyXuIWYTNbcb3tOwbKn3rh45-esdXCMVhWzx_4xzi2E9D4RUy3iMC9-zvevorNw1FSNPEdgumC_oQ4omz4V-SzcXWEUfpcrAT13HT6nSBpDQGzLPOxqzX6jW0JGD2_X25OTc2pyH8Jntq8YUBlJUAKvYudKh77gLCByKaKJO5B5UMrXPHf4\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -247,13 +240,8 @@
     "error": {
       "examples": [
         {
-          "title": "Response Failure: Email & Password does not match",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"email and password does not match\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The name field is required.\"\n}",
+          "title": "Response Failure: Validation",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Failed: email and password does not match\",\n  \"data\": {\n    \"user\": {},\n    \"token\": \"\"\n  }\n}",
           "type": "json"
         },
         {
@@ -348,28 +336,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>object as information about user registered</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Registering User (example)",
-          "content": " {\n  \"success\": true,\n  \"row\": {\n    \"email\": \"speed.rcm@gmail.com\",\n    \"name\": \"Dinda Lestari\",\n    \"fb_token\": null,\n    \"phone\": \"084737437434\",\n    \"updated_at\": \"2017-02-12 06:13:20\",\n    \"created_at\": \"2017-02-12 06:13:20\",\n    \"id\": 5\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Register User Successfully\",\n  \"data\": {\n    \"user\": {\n      \"id\": 6,\n      \"name\": \"Dinda Lestari\",\n      \"email\": \"dinda@gmail.comsa\",\n      \"fb_token\": null,\n      \"gender\": null,\n      \"birtdate\": null,\n      \"phone\": \"084737437434\",\n      \"address\": null,\n      \"photo\": null,\n      \"created_at\": \"2017-02-21 13:16:15\"\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -378,12 +348,12 @@
       "examples": [
         {
           "title": "Response Failure: User Already exists",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The email has already been taken.\"\n}",
+          "content": "\n{\n  \"error\": true,\n  \"message\": \"The email has already been taken.\",\n  \"data\": {\n    \"user\": {}\n  }\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The name field is required.\"\n}",
+          "content": "\n{\n  \"error\": true,\n  \"message\": \"The name field is required.\",\n  \"data\": {\n    \"user\": {}\n  }\n}",
           "type": "json"
         },
         {
@@ -422,28 +392,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about category</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Create Category (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"name\": \"Sport And Healty\",\n    \"updated_at\": \"2017-02-12 09:26:08\",\n    \"created_at\": \"2017-02-12 09:26:08\",\n    \"id\": 5\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Create Category Successfully\",\n  \"data\": {\n    \"category\": {\n      \"id\": 5,\n      \"name\": \"Sport And Healty\",\n      \"created_at\": \"2017-02-12 09:26:08\"\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -452,22 +404,49 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The name field is required.\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"The name field is required.\",\n  \"data\": {\n    \"category\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/category/create.js",
-    "groupTitle": "Category"
+    "groupTitle": "Category",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "GET",
-    "url": "/category/data",
+    "url": "/category/data/",
     "title": "Retrieve List Category",
     "version": "1.0.0",
     "name": "DataCategory",
@@ -478,28 +457,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data",
-            "description": "<p>array data of categorys</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Retrieve List Category (example)",
-          "content": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"Food\",\n      \"created_at\": \"2017-02-09 14:16:48\",\n      \"updated_at\": \"2017-02-09 14:16:48\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": 5,\n      \"name\": \"Sport And Healty\",\n      \"created_at\": \"2017-02-12 09:26:08\",\n      \"updated_at\": \"2017-02-12 09:26:08\",\n      \"deleted_at\": null\n    }\n  ]\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"List of Category\",\n  \"data\": {\n    \"list_category\": [\n      {\n        \"id\": 7,\n        \"name\": \"Sweater Blue Ocean Coldplay\",\n        \"created_at\": \"2017-02-16 10:20:51\"\n      },\n      {\n        \"id\": 8,\n        \"name\": \"Polo Holiday\",\n        \"created_at\": \"2017-02-16 10:20:55\"\n      },\n      {\n        \"id\": 5,\n        \"name\": \"Sport And Healty\",\n        \"created_at\": \"2017-02-12 09:26:08\"\n      }\n    ],\n    \"page\": \"1\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -507,14 +468,87 @@
     "error": {
       "examples": [
         {
+          "title": "Response Failure: Data Not Found",
+          "content": "\n{\n  \"error\": true,\n  \"message\": \"Category Not Found\",\n  \"data\": {\n    \"list_category\": [],\n    \"page\": \"1\"\n  }\n}",
+          "type": "json"
+        },
+        {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/category/data.js",
-    "groupTitle": "Category"
+    "groupTitle": "Category",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Option Parameter usage:",
+        "content": "?q=&page=1&sortby=created_at&order=desc&filters[name]=&filters[id]=",
+        "type": "json"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "q",
+            "description": "<p>parameter for searching .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "page",
+            "description": "<p>Page Number (20 row each 1 page) <code>Default Page 1</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "sortby",
+            "description": "<p>Field name as a key for sorting <code>e.g sortby=name</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "order",
+            "description": "<p>fill between <code>asc</code> or <code>desc</code>.</p>"
+          }
+        ]
+      }
+    }
   },
   {
     "type": "GET",
@@ -526,7 +560,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/category/1",
+        "content": "curl -i http://tawar.in/api/category/1",
         "type": "json"
       }
     ],
@@ -536,28 +570,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about categorys</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Retrieve single Category (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": 6,\n    \"name\": \"tes\",\n    \"created_at\": \"2017-02-12 10:22:18\",\n    \"updated_at\": \"2017-02-12 10:22:30\",\n    \"deleted_at\": null\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Detail of Category\",\n  \"data\": {\n    \"category\": {\n      \"id\": 5,\n      \"name\": \"Sport And Healty\",\n      \"created_at\": \"2017-02-12 09:26:08\"\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -566,18 +582,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data Not Found\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Category Not Found.\",\n  \"data\": {\n    \"category\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/category/detail.js",
-    "groupTitle": "Category"
+    "groupTitle": "Category",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "GET",
@@ -589,7 +632,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/category/delete/1",
+        "content": "curl -i http://tawar.in/api/category/delete/1",
         "type": "json"
       }
     ],
@@ -599,28 +642,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data",
-            "description": "<p>array data of categorys</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Soft Delete Category (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": 6,\n    \"name\": \"tes\",\n    \"created_at\": \"2017-02-12 10:22:18\",\n    \"updated_at\": \"2017-02-12 10:22:30\",\n    \"deleted_at\": \"2017-02-12 10:53:16\"\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Delete Category Sucessfully\",\n  \"data\": {\n    \"category\": {\n      \"id\": 5,\n      \"name\": \"Sport And Healty\",\n      \"created_at\": \"2017-02-12 09:26:08\"\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -629,18 +654,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data not found or already removed.\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Data not found or already removed..\",\n  \"data\": {\n    \"category\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/category/trash.js",
-    "groupTitle": "Category"
+    "groupTitle": "Category",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "GET",
@@ -692,7 +744,7 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
@@ -703,7 +755,34 @@
       ]
     },
     "filename": "./v1/category.trash.js",
-    "groupTitle": "Category"
+    "groupTitle": "Category",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "post",
@@ -759,7 +838,7 @@
       "examples": [
         {
           "title": "Response Success Update Category (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"name\": \"Sport And Healty Updated\",\n    \"updated_at\": \"2017-02-12 09:26:08\",\n    \"created_at\": \"2017-02-12 09:26:08\",\n    \"id\": 5\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Update Category Successfully\",\n  \"data\": {\n    \"category\": {\n      \"id\": 5,\n      \"name\": \"Sport And Healty\",\n      \"created_at\": \"2017-02-12 09:26:08\"\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -768,23 +847,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}\n\n{\n  \"error\": true,\n  \"message\": \"The name field is required.\",\n  \"data\": {\n    \"category\": {}\n  }\n}",
           "type": "json"
         },
         {
-          "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The name field is required.\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Response Failure: Category Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Category Not Found\"\n}",
+          "title": "Response Failure: Data Not Found",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Category Not Found.\",\n  \"data\": {\n    \"category\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/category/update.js",
-    "groupTitle": "Category"
+    "groupTitle": "Category",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "post",
@@ -819,28 +920,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about chat</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Create Chat (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"text\": \"{'messages':'Hi, There i want to buy these product. but my money it's not enough','id_product':'2'}\",\n    \"chats_rooms_id\": \"2\",\n    \"users_id\": 1,\n    \"updated_at\": \"2017-02-12 12:22:25\",\n    \"created_at\": \"2017-02-12 12:22:25\",\n    \"id\": 5\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Detail of Chat\",\n  \"data\": {\n    \"chat\": {\n      \"id\": 4,\n      \"users_id\": 4,\n      \"chats_rooms_id\": 2,\n      \"text\": \"{'messages':'Hi, There i want to buy these product. but my money i's not enough','id_product':'2'}\",\n      \"created_at\": \"2017-02-09 14:37:02\",\n      \"user\": {\n        \"id\": 4,\n        \"name\": \"psdfp\",\n        \"email\": \"hery@gmail.comdssds\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": null,\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-16 19:45:06\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -849,18 +932,40 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The name field is required.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}\n\n{\n  \"error\": true,\n  \"message\": \"The name field is required.\",\n  \"data\": {\n    \"chat\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/chat/create.js",
-    "groupTitle": "Chat"
+    "groupTitle": "Chat",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "GET",
@@ -875,28 +980,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data",
-            "description": "<p>array data of chats</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Retrieve List Chat (example)",
-          "content": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"users_id\": 1,\n      \"chats_rooms_id\": 1,\n      \"text\": \"{pesan:holla,product:2}\",\n      \"created_at\": \"2017-02-09 14:36:34\",\n      \"updated_at\": \"2017-02-09 14:37:23\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": 4,\n      \"users_id\": 1,\n      \"chats_rooms_id\": 2,\n      \"text\": \"{'messages':'Hi, There i want to buy these product. but my money it's not enough','id_product':'2'}\",\n      \"created_at\": \"2017-02-09 14:37:02\",\n      \"updated_at\": \"2017-02-12 12:28:51\",\n      \"deleted_at\": null\n    }\n ]\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"List of Chat\",\n  \"data\": {\n    \"list_chat\": [\n      {\n        \"id\": 5,\n        \"users_id\": 2,\n        \"chats_rooms_id\": 2,\n        \"text\": \"{'messages':'Hi, There i want to buy these product. but my money i's not enough','id_product':'2'}\",\n        \"created_at\": \"2017-02-12 12:22:25\",\n        \"user\": {\n          \"id\": 2,\n          \"name\": \"Dinda Lestari\",\n          \"email\": \"dinda@gmail.com\",\n          \"fb_token\": null,\n          \"gender\": null,\n          \"birtdate\": null,\n          \"phone\": \"084737437434\",\n          \"address\": null,\n          \"photo\": null,\n          \"created_at\": \"2017-02-09 13:57:03\"\n        }\n      },\n      {\n        \"id\": 4,\n        \"users_id\": 4,\n        \"chats_rooms_id\": 2,\n        \"text\": \"{'messages':'Hi, There i want to buy these product. but my money i's not enough','id_product':'2'}\",\n        \"created_at\": \"2017-02-09 14:37:02\",\n        \"user\": {\n          \"id\": 4,\n          \"name\": \"psdfp\",\n          \"email\": \"hery@gmail.comdssds\",\n          \"fb_token\": null,\n          \"gender\": null,\n          \"birtdate\": null,\n          \"phone\": null,\n          \"address\": null,\n          \"photo\": null,\n          \"created_at\": \"2017-02-16 19:45:06\"\n        }\n      }\n    ],\n    \"page\": \"1\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -904,14 +991,87 @@
     "error": {
       "examples": [
         {
+          "title": "Response Failure: Data Not Found",
+          "content": "\n{\n  \"error\": true,\n  \"message\": \"Chat Not Found\",\n  \"data\": {\n    \"list_chat\": [],\n    \"page\": \"1\"\n  }\n}",
+          "type": "json"
+        },
+        {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/chat/data.js",
-    "groupTitle": "Chat"
+    "groupTitle": "Chat",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Option Parameter usage:",
+        "content": "?q=&page=1&sortby=created_at&order=desc&filters[name]=&filters[id]=",
+        "type": "json"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "q",
+            "description": "<p>parameter for searching .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "page",
+            "description": "<p>Page Number (20 row each 1 page) <code>Default Page 1</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "sortby",
+            "description": "<p>Field name as a key for sorting <code>e.g sortby=name</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "order",
+            "description": "<p>fill between <code>asc</code> or <code>desc</code>.</p>"
+          }
+        ]
+      }
+    }
   },
   {
     "type": "GET",
@@ -923,7 +1083,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/chat/5",
+        "content": "curl -i http://tawar.in/api/chat/5",
         "type": "json"
       }
     ],
@@ -933,28 +1093,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about chats</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Retrieve single Chat (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"text\": \"{'messages':'Hi, There i want to buy these product. my money is 300.00,00','id_product':'2'}\",\n    \"chats_rooms_id\": \"2\",\n    \"users_id\": 1,\n    \"updated_at\": \"2017-02-12 12:30:08\",\n    \"created_at\": \"2017-02-12 12:22:25\",\n    \"id\": 5\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Detail of Chat\",\n  \"data\": {\n    \"chat\": {\n      \"id\": 4,\n      \"users_id\": 4,\n      \"chats_rooms_id\": 2,\n      \"text\": \"{'messages':'Hi, There i want to buy these product. but my money i's not enough','id_product':'2'}\",\n      \"created_at\": \"2017-02-09 14:37:02\",\n      \"user\": {\n        \"id\": 4,\n        \"name\": \"psdfp\",\n        \"email\": \"hery@gmail.comdssds\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": null,\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-16 19:45:06\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -963,18 +1105,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data Not Found\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Chat Not Found.\",\n  \"data\": {\n    \"chat\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/chat/detail.js",
-    "groupTitle": "Chat"
+    "groupTitle": "Chat",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "GET",
@@ -986,7 +1155,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/chat/delete/5",
+        "content": "curl -i http://tawar.in/api/chat/delete/5",
         "type": "json"
       }
     ],
@@ -1026,18 +1195,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data not found or already removed.\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Data not found or already removed..\",\n  \"data\": {\n    \"category\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/chat/trash.js",
-    "groupTitle": "Chat"
+    "groupTitle": "Chat",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "post",
@@ -1079,28 +1275,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about chat</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Update Chat (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"text\": \"{'messages':'Hi, There i want to buy these product. my money is 300.00,00','id_product':'2'}\",\n    \"chats_rooms_id\": \"2\",\n    \"users_id\": 1,\n    \"updated_at\": \"2017-02-12 12:30:08\",\n    \"created_at\": \"2017-02-12 12:22:25\",\n    \"id\": 5\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"update chat successfully\",\n  \"data\": {\n    \"chat\": {\n      \"id\": 4,\n      \"users_id\": 4,\n      \"chats_rooms_id\": 2,\n      \"text\": \"{'messages':'Hi, There i want to buy these product. but my money i's not enough','id_product':'2'}\",\n      \"created_at\": \"2017-02-09 14:37:02\",\n      \"user\": {\n        \"id\": 4,\n        \"name\": \"psdfp\",\n        \"email\": \"hery@gmail.comdssds\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": null,\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-16 19:45:06\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -1109,23 +1287,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}\n\n{\n  \"error\": true,\n  \"message\": \"The name field is required.\",\n  \"data\": {\n    \"chat\": {}\n  }\n}",
           "type": "json"
         },
         {
-          "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The name field is required.\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Response Failure: Chat Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Chat Not Found\"\n}",
+          "title": "Response Failure: Data Not Found",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Chat Not Found.\",\n  \"data\": {\n    \"chat\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/chat/update.js",
-    "groupTitle": "Chat"
+    "groupTitle": "Chat",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "post",
@@ -1147,34 +1347,16 @@
             "type": "String",
             "optional": false,
             "field": "name",
-            "description": "<p>Name of the ChatsRoom <code>(Required)</code>.</p>"
+            "description": "<p>Name of the Category <code>(Required)</code>.</p>"
           }
         ]
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about chats room</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Create ChatsRoom (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"name\": \"Chats Room 07\",\n    \"updated_at\": \"2017-02-12 09:26:08\",\n    \"created_at\": \"2017-02-12 09:26:08\",\n    \"id\": 5\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Create Chat Room Sucessfully\",\n  \"data\": {\n    \"chatsroom\": {\n      \"id\": 1,\n      \"name\": \"Chats Room 01\",\n      \"created_at\": \"2017-02-09 14:26:23\"\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -1183,18 +1365,40 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The name field is required.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}\n\n{\n  \"error\": true,\n  \"message\": \"The name field is required.\",\n  \"data\": {\n    \"chatsroom\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/chatsroom/create.js",
-    "groupTitle": "ChatsRoom"
+    "groupTitle": "ChatsRoom",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "GET",
@@ -1209,28 +1413,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data",
-            "description": "<p>array data of chats rooms</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Retrieve List ChatsRoom (example)",
-          "content": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"Chats Room 01\",\n      \"created_at\": \"2017-02-09 14:26:23\",\n      \"updated_at\": \"2017-02-09 14:26:57\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Chats Room 02\",\n      \"created_at\": \"2017-02-09 14:26:46\",\n      \"updated_at\": \"2017-02-09 14:26:46\",\n      \"deleted_at\": null\n    }\n  ]\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"List of Chats Room\",\n  \"data\": {\n    \"list_chatsroom\": [\n      {\n        \"id\": 2,\n        \"name\": \"Chats Room 02\",\n        \"created_at\": \"2017-02-09 14:26:46\"\n      },\n      {\n        \"id\": 1,\n        \"name\": \"Chats Room 01\",\n        \"created_at\": \"2017-02-09 14:26:23\"\n      }\n    ],\n    \"page\": \"1\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -1238,14 +1424,87 @@
     "error": {
       "examples": [
         {
+          "title": "Response Failure: Data Not Found",
+          "content": "\n{\n  \"error\": true,\n  \"message\": \"ChatsRoom Not Found\",\n  \"data\": {\n    \"list_chatsroom\": [],\n    \"page\": \"1\"\n  }\n}",
+          "type": "json"
+        },
+        {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/chatsroom/data.js",
-    "groupTitle": "ChatsRoom"
+    "groupTitle": "ChatsRoom",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Option Parameter usage:",
+        "content": "?q=&page=1&sortby=created_at&order=desc&filters[name]=&filters[id]=",
+        "type": "json"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "q",
+            "description": "<p>parameter for searching .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "page",
+            "description": "<p>Page Number (20 row each 1 page) <code>Default Page 1</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "sortby",
+            "description": "<p>Field name as a key for sorting <code>e.g sortby=name</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "order",
+            "description": "<p>fill between <code>asc</code> or <code>desc</code>.</p>"
+          }
+        ]
+      }
+    }
   },
   {
     "type": "GET",
@@ -1257,7 +1516,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/chats_room/1",
+        "content": "curl -i http://tawar.in/api/chats_room/1",
         "type": "json"
       }
     ],
@@ -1288,7 +1547,7 @@
       "examples": [
         {
           "title": "Response Success Retrieve single ChatsRoom (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": 6,\n    \"name\": \"Chats Room 08\",\n    \"created_at\": \"2017-02-12 10:22:18\",\n    \"updated_at\": \"2017-02-12 10:22:30\",\n    \"deleted_at\": null\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Detail of Chats Room\",\n  \"data\": {\n    \"chatsroom\": {\n      \"id\": 1,\n      \"name\": \"Chats Room 01\",\n      \"created_at\": \"2017-02-09 14:26:23\"\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -1297,18 +1556,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data Not Found\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"ChatsRoom Not Found.\",\n  \"data\": {\n    \"chatsroom\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/chatsroom/detail.js",
-    "groupTitle": "ChatsRoom"
+    "groupTitle": "ChatsRoom",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "GET",
@@ -1320,7 +1606,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/chats_room/delete/1",
+        "content": "curl -i http://tawar.in/api/chats_room/delete/1",
         "type": "json"
       }
     ],
@@ -1330,28 +1616,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data",
-            "description": "<p>array data of chats rooms</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Soft Delete ChatsRoom (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": 6,\n    \"name\": \"Chats Room 03\",\n    \"created_at\": \"2017-02-12 10:22:18\",\n    \"updated_at\": \"2017-02-12 10:22:30\",\n    \"deleted_at\": \"2017-02-12 10:53:16\"\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Delete Chats Room Successfully\",\n  \"data\": {\n    \"chatsroom\": {\n      \"id\": 1,\n      \"name\": \"Chats Room 01\",\n      \"created_at\": \"2017-02-09 14:26:23\"\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -1360,18 +1628,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data not found or already removed.\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Data not found or already removed..\",\n  \"data\": {\n    \"chatsroom\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/chatsroom/trash.js",
-    "groupTitle": "ChatsRoom"
+    "groupTitle": "ChatsRoom",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "post",
@@ -1406,28 +1701,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about chats room</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Update ChatsRoom (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"name\": \"Chats Room 08\",\n    \"updated_at\": \"2017-02-12 09:26:08\",\n    \"created_at\": \"2017-02-12 09:26:08\",\n    \"id\": 5\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Update Chats Room Successfully\",\n  \"data\": {\n    \"chatsroom\": {\n      \"id\": 1,\n      \"name\": \"Chats Room 01\",\n      \"created_at\": \"2017-02-09 14:26:23\"\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -1436,23 +1713,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}\n\n{\n  \"error\": true,\n  \"message\": \"The name field is required.\",\n  \"data\": {\n    \"chatsroom\": {}\n  }\n}",
           "type": "json"
         },
         {
-          "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The name field is required.\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Response Failure: ChatsRoom Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"ChatsRoom Not Found\"\n}",
+          "title": "Response Failure: Data Not Found",
+          "content": "{\n  \"error\": true,\n  \"message\": \"ChatsRoom Not Found.\",\n  \"data\": {\n    \"chatsroom\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/chatsroom/update.js",
-    "groupTitle": "ChatsRoom"
+    "groupTitle": "ChatsRoom",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "post",
@@ -1487,28 +1786,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about comment</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Create Comment (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"products_id\": \"4\",\n    \"messages\": \"I like this. Best Great T-shirt ever\",\n    \"users_id\": 1,\n    \"updated_at\": \"2017-02-12 12:38:29\",\n    \"created_at\": \"2017-02-12 12:38:29\",\n    \"id\": 9\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Create Comment Successfully\",\n  \"data\": {\n    \"comment\": {\n      \"id\": 9,\n      \"products_id\": 4,\n      \"users_id\": 1,\n      \"messages\": \"I like this. Best Great T-shirt ever\",\n      \"created_at\": \"2017-02-12 12:38:29\",\n      \"product\": {\n        \"id\": 4,\n        \"name\": \"Sweater Blue Ocean Coldplay\",\n        \"price\": \"30000.00\",\n        \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n        \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n        \"categories_id\": 2,\n        \"users_id\": 1,\n        \"created_at\": \"2017-02-12 12:10:40\"\n      },\n      \"user\": {\n        \"id\": 1,\n        \"name\": \"Hery kuswandi\",\n        \"email\": \"hery@gmail.com\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": \"084737437434\",\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-09 13:55:50\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -1517,18 +1798,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The messages field is required.\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"The messages field is required.\",\n  \"data\": {\n    \"comment\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/comment/create.js",
-    "groupTitle": "Comment"
+    "groupTitle": "Comment",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "GET",
@@ -1543,28 +1851,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data",
-            "description": "<p>array data of comments</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Retrieve List Comment (example)",
-          "content": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"Food\",\n      \"created_at\": \"2017-02-09 14:16:48\",\n      \"updated_at\": \"2017-02-09 14:16:48\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": 5,\n      \"name\": \"Sport And Healty\",\n      \"created_at\": \"2017-02-12 09:26:08\",\n      \"updated_at\": \"2017-02-12 09:26:08\",\n      \"deleted_at\": null\n    }\n  ]\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"List of Comment\",\n  \"data\": {\n    \"list_comment\": [\n      {\n        \"id\": 2,\n        \"products_id\": 1,\n        \"users_id\": 1,\n        \"messages\": \"ahh gk reomenden in\",\n        \"created_at\": \"2017-02-09 14:43:24\",\n        \"product\": null,\n        \"user\": {\n          \"id\": 1,\n          \"name\": \"Hery kuswandi\",\n          \"email\": \"hery@gmail.com\",\n          \"fb_token\": null,\n          \"gender\": null,\n          \"birtdate\": null,\n          \"phone\": \"084737437434\",\n          \"address\": null,\n          \"photo\": null,\n          \"created_at\": \"2017-02-09 13:55:50\"\n        }\n      },\n      {\n        \"id\": 1,\n        \"products_id\": 1,\n        \"users_id\": 1,\n        \"messages\": \"Produknya kok gini ya ,\",\n        \"created_at\": \"2017-02-09 14:43:08\",\n        \"product\": null,\n        \"user\": {\n          \"id\": 1,\n          \"name\": \"Hery kuswandi\",\n          \"email\": \"hery@gmail.com\",\n          \"fb_token\": null,\n          \"gender\": null,\n          \"birtdate\": null,\n          \"phone\": \"084737437434\",\n          \"address\": null,\n          \"photo\": null,\n          \"created_at\": \"2017-02-09 13:55:50\"\n        }\n      }\n    ],\n    \"page\": \"1\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -1572,14 +1862,87 @@
     "error": {
       "examples": [
         {
+          "title": "Response Failure: Data Not Found",
+          "content": "\n{\n  \"error\": true,\n  \"message\": \"Comment Not Found\",\n  \"data\": {\n    \"list_comment\": [],\n    \"page\": \"1\"\n  }\n}",
+          "type": "json"
+        },
+        {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/comment/data.js",
-    "groupTitle": "Comment"
+    "groupTitle": "Comment",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Option Parameter usage:",
+        "content": "?q=&page=1&sortby=created_at&order=desc&filters[name]=&filters[id]=",
+        "type": "json"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "q",
+            "description": "<p>parameter for searching .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "page",
+            "description": "<p>Page Number (20 row each 1 page) <code>Default Page 1</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "sortby",
+            "description": "<p>Field name as a key for sorting <code>e.g sortby=name</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "order",
+            "description": "<p>fill between <code>asc</code> or <code>desc</code>.</p>"
+          }
+        ]
+      }
+    }
   },
   {
     "type": "GET",
@@ -1591,7 +1954,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/comment/9",
+        "content": "curl -i http://tawar.in/api/comment/9",
         "type": "json"
       }
     ],
@@ -1601,28 +1964,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about comments</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Retrieve single Comment (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"products_id\": \"4\",\n    \"messages\": \"I like this. Best Great T-shirt ever\",\n    \"users_id\": 1,\n    \"updated_at\": \"2017-02-12 12:38:29\",\n    \"created_at\": \"2017-02-12 12:38:29\",\n    \"id\": 9\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Detail of Comment\",\n  \"data\": {\n    \"comment\": {\n      \"id\": 9,\n      \"products_id\": 4,\n      \"users_id\": 1,\n      \"messages\": \"I like this. Best Great T-shirt ever\",\n      \"created_at\": \"2017-02-12 12:38:29\",\n      \"product\": {\n        \"id\": 4,\n        \"name\": \"Sweater Blue Ocean Coldplay\",\n        \"price\": \"30000.00\",\n        \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n        \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n        \"categories_id\": 2,\n        \"users_id\": 1,\n        \"created_at\": \"2017-02-12 12:10:40\"\n      },\n      \"user\": {\n        \"id\": 1,\n        \"name\": \"Hery kuswandi\",\n        \"email\": \"hery@gmail.com\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": \"084737437434\",\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-09 13:55:50\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -1631,18 +1976,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data Not Found\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Comment Not Found.\",\n  \"data\": {\n    \"comment\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/comment/detail.js",
-    "groupTitle": "Comment"
+    "groupTitle": "Comment",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "GET",
@@ -1654,7 +2026,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/comment/delete/9",
+        "content": "curl -i http://tawar.in/api/comment/delete/9",
         "type": "json"
       }
     ],
@@ -1664,28 +2036,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data",
-            "description": "<p>array data of comments</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Soft Delete Comment (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"products_id\": \"4\",\n    \"messages\": \"I like this. Best Great T-shirt ever\",\n    \"users_id\": 1,\n    \"updated_at\": \"2017-02-12 12:38:29\",\n    \"created_at\": \"2017-02-12 12:38:29\",\n    \"deleted_at\": \"2017-02-12 12:53:16\",\n   \"id\": 9\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Detail of Comment\",\n  \"data\": {\n    \"comment\": {\n      \"id\": 9,\n      \"products_id\": 4,\n      \"users_id\": 1,\n      \"messages\": \"I like this. Best Great T-shirt ever\",\n      \"created_at\": \"2017-02-12 12:38:29\",\n      \"product\": {\n        \"id\": 4,\n        \"name\": \"Sweater Blue Ocean Coldplay\",\n        \"price\": \"30000.00\",\n        \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n        \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n        \"categories_id\": 2,\n        \"users_id\": 1,\n        \"created_at\": \"2017-02-12 12:10:40\"\n      },\n      \"user\": {\n        \"id\": 1,\n        \"name\": \"Hery kuswandi\",\n        \"email\": \"hery@gmail.com\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": \"084737437434\",\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-09 13:55:50\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -1694,18 +2048,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data not found or already removed.\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Data not found or already removed..\",\n  \"data\": {\n    \"comment\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/comment/trash.js",
-    "groupTitle": "Comment"
+    "groupTitle": "Comment",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "post",
@@ -1747,28 +2128,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about comment</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Update Comment (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"products_id\": \"4\",\n    \"messages\": \"I like this. Best Great T-shirt ever\",\n    \"users_id\": 1,\n    \"updated_at\": \"2017-02-12 12:45:21\",\n    \"created_at\": \"2017-02-12 12:38:29\",\n    \"id\": 9\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Update Comment Successfully\",\n  \"data\": {\n    \"comment\": {\n      \"id\": 9,\n      \"products_id\": 4,\n      \"users_id\": 1,\n      \"messages\": \"I like this. Best Great T-shirt ever\",\n      \"created_at\": \"2017-02-12 12:38:29\",\n      \"product\": {\n        \"id\": 4,\n        \"name\": \"Sweater Blue Ocean Coldplay\",\n        \"price\": \"30000.00\",\n        \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n        \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n        \"categories_id\": 2,\n        \"users_id\": 1,\n        \"created_at\": \"2017-02-12 12:10:40\"\n      },\n      \"user\": {\n        \"id\": 1,\n        \"name\": \"Hery kuswandi\",\n        \"email\": \"hery@gmail.com\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": \"084737437434\",\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-09 13:55:50\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -1777,23 +2140,101 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}\n\n{\n  \"error\": true,\n  \"message\": \"The message field is required.\",\n  \"data\": {\n    \"comment\": {}\n  }\n}",
           "type": "json"
         },
         {
-          "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The messages field is required.\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Response Failure: Comment Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Comment Not Found\"\n}",
+          "title": "Response Failure: Data Not Found",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Comment Not Found.\",\n  \"data\": {\n    \"comment\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/comment/update.js",
-    "groupTitle": "Comment"
+    "groupTitle": "Comment",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "optional": false,
+            "field": "varname1",
+            "description": "<p>No type.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "varname2",
+            "description": "<p>With type.</p>"
+          }
+        ]
+      }
+    },
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "./doc/main.js",
+    "group": "D__nodejs_tawarin_api_doc_main_js",
+    "groupTitle": "D__nodejs_tawarin_api_doc_main_js",
+    "name": ""
+  },
+  {
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "optional": false,
+            "field": "varname1",
+            "description": "<p>No type.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "varname2",
+            "description": "<p>With type.</p>"
+          }
+        ]
+      }
+    },
+    "type": "",
+    "url": "",
+    "version": "0.0.0",
+    "filename": "./public/apidoc/main.js",
+    "group": "D__nodejs_tawarin_api_public_apidoc_main_js",
+    "groupTitle": "D__nodejs_tawarin_api_public_apidoc_main_js",
+    "name": ""
   },
   {
     "type": "post",
@@ -1849,28 +2290,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about product</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Create Product (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"name\": \"T-shirt Blue Coldplay\",\n    \"price\": \"200000.00\",\n    \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n    \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n    \"categories_id\": \"2\",\n    \"users_id\": 1,\n    \"updated_at\": \"2017-02-12 12:09:17\",\n    \"created_at\": \"2017-02-12 12:09:17\",\n    \"id\": 3\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Create Product Sucessfully\",\n  \"data\": {\n    \"product\": {\n      \"id\": 4,\n      \"name\": \"Sweater Blue Ocean Coldplay\",\n      \"price\": \"30000.00\",\n      \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n      \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n      \"categories_id\": 2,\n      \"users_id\": 1,\n      \"created_at\": \"2017-02-12 12:10:40\",\n      \"category\": {\n        \"id\": 2,\n        \"name\": \"SeafOOd\",\n        \"created_at\": \"2017-02-09 14:16:57\"\n      },\n      \"user\": {\n        \"id\": 1,\n        \"name\": \"Hery kuswandi\",\n        \"email\": \"hery@gmail.com\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": \"084737437434\",\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-09 13:55:50\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -1879,18 +2302,40 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The name field is required.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}\n\n{\n  \"error\": true,\n  \"message\": \"The name field is required.\",\n  \"data\": {\n    \"product\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/product/create.js",
-    "groupTitle": "Product"
+    "groupTitle": "Product",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "GET",
@@ -1905,28 +2350,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data",
-            "description": "<p>array data of products</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Retrieve List Product (example)",
-          "content": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"id\": 3,\n      \"name\": \"T-shirt Blue Coldplay\",\n      \"price\": \"200000.00\",\n      \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n      \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n      \"categories_id\": 2,\n      \"users_id\": 1,\n      \"created_at\": \"2017-02-12 12:09:17\",\n      \"updated_at\": \"2017-02-12 12:09:17\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": 4,\n      \"name\": \"Sweater Blue Ocean Coldplay\",\n      \"price\": \"30000.00\",\n      \"description\": \"All Size\",\n      \"images\": \"{'http://thumb.rl/product1.jpg'}\",\n      \"categories_id\": 2,\n      \"users_id\": 1,\n      \"created_at\": \"2017-02-12 12:10:40\",\n      \"updated_at\": \"2017-02-12 12:12:37\",\n      \"deleted_at\": null\n    }\n  ]\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"List of Product\",\n  \"data\": {\n    \"list_product\": [\n      {\n        \"id\": 4,\n        \"name\": \"Sweater Blue Ocean Coldplay\",\n        \"price\": \"30000.00\",\n        \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n        \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n        \"categories_id\": 2,\n        \"users_id\": 1,\n        \"created_at\": \"2017-02-12 12:10:40\",\n        \"category\": {\n          \"id\": 2,\n          \"name\": \"Sweater\",\n          \"created_at\": \"2017-02-09 14:16:57\"\n        },\n        \"user\": {\n          \"id\": 1,\n          \"name\": \"Hery kuswandi\",\n          \"email\": \"hery@gmail.com\",\n          \"fb_token\": null,\n          \"gender\": null,\n          \"birtdate\": null,\n          \"phone\": \"084737437434\",\n          \"address\": null,\n          \"photo\": null,\n          \"created_at\": \"2017-02-09 13:55:50\"\n        }\n      },\n      {\n        \"id\": 2,\n        \"name\": \"Baju Blue\",\n        \"price\": \"230000.00\",\n        \"description\": null,\n        \"images\": null,\n        \"categories_id\": null,\n        \"users_id\": 2,\n        \"created_at\": null,\n      \"category\": {\n          \"id\": 1,\n          \"name\": \"Kaos\",\n          \"created_at\": \"2017-02-09 14:16:57\"\n        },    \n        \"user\": {\n          \"id\": 2,\n          \"name\": \"Dinda Lestari\",\n          \"email\": \"dinda@gmail.com\",\n          \"fb_token\": null,\n          \"gender\": null,\n          \"birtdate\": null,\n          \"phone\": \"084737437434\",\n          \"address\": null,\n          \"photo\": null,\n          \"created_at\": \"2017-02-09 13:57:03\"\n        }\n      }\n    ],\n    \"page\": \"1\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -1934,14 +2361,87 @@
     "error": {
       "examples": [
         {
+          "title": "Response Failure: Data Not Found",
+          "content": "\n{\n  \"error\": true,\n  \"message\": \"Product Not Found\",\n  \"data\": {\n    \"list_product\": [],\n    \"page\": \"1\"\n  }\n}",
+          "type": "json"
+        },
+        {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/product/data.js",
-    "groupTitle": "Product"
+    "groupTitle": "Product",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Option Parameter usage:",
+        "content": "?q=&page=1&sortby=created_at&order=desc&filters[name]=&filters[id]=",
+        "type": "json"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "q",
+            "description": "<p>parameter for searching .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "page",
+            "description": "<p>Page Number (20 row each 1 page) <code>Default Page 1</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "sortby",
+            "description": "<p>Field name as a key for sorting <code>e.g sortby=name</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "order",
+            "description": "<p>fill between <code>asc</code> or <code>desc</code>.</p>"
+          }
+        ]
+      }
+    }
   },
   {
     "type": "GET",
@@ -1953,7 +2453,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/product/4",
+        "content": "curl -i http://tawar.in/api/product/4",
         "type": "json"
       }
     ],
@@ -1963,28 +2463,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about products</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Retrieve single Product (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": 4,\n    \"name\": \"Sweater Blue Ocean Coldplay\",\n    \"price\": \"30000.00\",\n    \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n    \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n    \"categories_id\": 2,\n    \"users_id\": 1,\n    \"created_at\": \"2017-02-12 12:10:40\",\n    \"updated_at\": \"2017-02-12 12:12:37\",\n    \"deleted_at\": null\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Detail of Product\",\n  \"data\": {\n    \"product\": {\n      \"id\": 4,\n      \"name\": \"Sweater Blue Ocean Coldplay\",\n      \"price\": \"30000.00\",\n      \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n      \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n      \"categories_id\": 2,\n      \"users_id\": 1,\n      \"created_at\": \"2017-02-12 12:10:40\",\n      \"category\": {\n        \"id\": 2,\n        \"name\": \"SeafOOd\",\n        \"created_at\": \"2017-02-09 14:16:57\"\n      },\n      \"user\": {\n        \"id\": 1,\n        \"name\": \"Hery kuswandi\",\n        \"email\": \"hery@gmail.com\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": \"084737437434\",\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-09 13:55:50\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -1993,18 +2475,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data Not Found\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Product Not Found.\",\n  \"data\": {\n    \"product\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/product/detail.js",
-    "groupTitle": "Product"
+    "groupTitle": "Product",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "GET",
@@ -2016,7 +2525,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/product/delete/1",
+        "content": "curl -i http://tawar.in/api/product/delete/1",
         "type": "json"
       }
     ],
@@ -2026,28 +2535,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data",
-            "description": "<p>array data of products</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Soft Delete Product (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": 3,\n    \"name\": \"T-shirt Blue Coldplay\",\n    \"price\": \"200000.00\",\n    \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n    \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n    \"categories_id\": 2,\n    \"users_id\": 1,\n    \"created_at\": \"2017-02-12 12:09:17\",\n    \"updated_at\": \"2017-02-12 12:09:17\",\n    \"deleted_at\": \"2017-02-12 12:14:41\"\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Detail of Product\",\n  \"data\": {\n    \"product\": {\n      \"id\": 4,\n      \"name\": \"Sweater Blue Ocean Coldplay\",\n      \"price\": \"30000.00\",\n      \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n      \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n      \"categories_id\": 2,\n      \"users_id\": 1,\n      \"created_at\": \"2017-02-12 12:10:40\",\n      \"category\": {\n        \"id\": 2,\n        \"name\": \"SeafOOd\",\n        \"created_at\": \"2017-02-09 14:16:57\"\n      },\n      \"user\": {\n        \"id\": 1,\n        \"name\": \"Hery kuswandi\",\n        \"email\": \"hery@gmail.com\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": \"084737437434\",\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-09 13:55:50\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -2056,18 +2547,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data not found or already removed.\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Data not found or already removed..\",\n  \"data\": {\n    \"product\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/product/trash.js",
-    "groupTitle": "Product"
+    "groupTitle": "Product",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "post",
@@ -2130,28 +2648,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about product</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Update Product (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": 4,\n    \"name\": \"Sweater Blue Ocean Coldplay\",\n    \"price\": \"30000.00\",\n    \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n    \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n    \"categories_id\": 2,\n    \"users_id\": 1,\n    \"created_at\": \"2017-02-12 12:10:40\",\n    \"updated_at\": \"2017-02-12 12:12:37\",\n    \"deleted_at\": null\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Update Product Sucessfully\",\n  \"data\": {\n    \"product\": {\n      \"id\": 4,\n      \"name\": \"Sweater Blue Ocean Coldplay\",\n      \"price\": \"30000.00\",\n      \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n      \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n      \"categories_id\": 2,\n      \"users_id\": 1,\n      \"created_at\": \"2017-02-12 12:10:40\",\n      \"category\": {\n        \"id\": 2,\n        \"name\": \"SeafOOd\",\n        \"created_at\": \"2017-02-09 14:16:57\"\n      },\n      \"user\": {\n        \"id\": 1,\n        \"name\": \"Hery kuswandi\",\n        \"email\": \"hery@gmail.com\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": \"084737437434\",\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-09 13:55:50\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -2160,23 +2660,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}\n\n{\n  \"error\": true,\n  \"message\": \"The name field is required.\",\n  \"data\": {\n    \"product\": {}\n  }\n}",
           "type": "json"
         },
         {
-          "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The name field is required.\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Response Failure: Product Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Product Not Found or Not allowed for updated this product\"\n}",
+          "title": "Response Failure: Data Not Found",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Product Not Found.\",\n  \"data\": {\n    \"product\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/product/update.js",
-    "groupTitle": "Product"
+    "groupTitle": "Product",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "post",
@@ -2225,28 +2747,10 @@
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information about transaction</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Create Transaction (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"tax\": \"5000\",\n    \"subtotal\": \"125000.00\",\n    \"total\": \"120000.00\",\n    \"discount\": \"5000\",\n    \"users_id\": 1,\n    \"id\": \"TRX1702120111074\",\n    \"updated_at\": \"2017-02-12 13:11:07\",\n    \"created_at\": \"2017-02-12 13:11:07\"\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Create Transaction Successfully\",\n  \"data\": {\n    \"transaction\": {\n      \"id\": \"TRX1702120110427\",\n      \"users_id\": 1,\n      \"discount\": \"5000.00\",\n      \"tax\": \"5000.00\",\n      \"subtotal\": \"125000.00\",\n      \"total\": \"120000.00\",\n      \"notes\": null,\n      \"created_at\": \"2017-02-12 13:10:42\",\n      \"user\": {\n        \"id\": 1,\n        \"name\": \"Hery kuswandi\",\n        \"email\": \"hery@gmail.com\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": \"084737437434\",\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-09 13:55:50\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -2255,76 +2759,40 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The name field is required.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}\n\n{\n  \"error\": true,\n  \"message\": \"The Total field is required.\",\n  \"data\": {\n    \"transaction\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/transaction/create.js",
-    "groupTitle": "Transaction"
-  },
-  {
-    "type": "GET",
-    "url": "/transaction/detail/{ID_TRANSACTION}",
-    "title": "Retrieve List Detail Transaction By ID Transactions",
-    "version": "1.0.0",
-    "name": "DataDetailTransaction",
-    "group": "Transaction",
-    "permission": [
-      {
-        "name": "User Token Required"
-      }
-    ],
-    "examples": [
-      {
-        "title": "Example usage:",
-        "content": "curl -i http://tawar.in/transaction/detail/TRX170209025558",
-        "type": "json"
-      }
-    ],
-    "success": {
+    "groupTitle": "Transaction",
+    "header": {
       "fields": {
-        "Success 200": [
+        "Header": [
           {
-            "group": "Success 200",
-            "type": "Boolean",
+            "group": "Header",
+            "type": "String",
             "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
           },
           {
-            "group": "Success 200",
-            "type": "Object[]",
+            "group": "Header",
+            "type": "String",
             "optional": false,
-            "field": "data",
-            "description": "<p>array data of transactions</p>"
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
           }
         ]
       },
       "examples": [
         {
-          "title": "Response Success Retrieve List Transaction (example)",
-          "content": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"transactions_id\": \"TRX170209025558\",\n      \"products_id\": 2,\n      \"real_price\": \"4000.00\",\n      \"bargain_price\": \"5000.00\",\n      \"created_at\": \"2017-02-09 15:05:55\",\n      \"updated_at\": \"2017-02-09 15:05:55\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": 5,\n      \"transactions_id\": \"TRX170209025558\",\n      \"products_id\": 4,\n      \"real_price\": \"125000.00\",\n      \"bargain_price\": \"100000.00\",\n      \"created_at\": \"2017-02-12 13:35:57\",\n      \"updated_at\": \"2017-02-12 13:35:57\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": 6,\n      \"transactions_id\": \"TRX170209025558\",\n      \"products_id\": 3,\n      \"real_price\": \"200000.00\",\n      \"bargain_price\": \"150000.00\",\n      \"created_at\": \"2017-02-12 13:41:37\",\n      \"updated_at\": \"2017-02-12 13:41:37\",\n      \"deleted_at\": null\n    }\n  ]\n}",
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
           "type": "json"
         }
       ]
-    },
-    "error": {
-      "examples": [
-        {
-          "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "./v1/transaction/data_detail.js",
-    "groupTitle": "Transaction"
+    }
   },
   {
     "type": "GET",
@@ -2339,28 +2807,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data",
-            "description": "<p>array data of transactions</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Retrieve List Transaction (example)",
-          "content": "{\n  \"success\": true,\n  \"data\": [\n    {\n      \"id\": \"TRX1702120110427\",\n      \"users_id\": 1,\n      \"discount\": \"5000.00\",\n      \"tax\": \"5000.00\",\n      \"subtotal\": \"125000.00\",\n      \"total\": \"120000.00\",\n      \"notes\": null,\n      \"created_at\": \"2017-02-12 13:10:42\",\n      \"updated_at\": \"2017-02-12 13:10:42\",\n      \"deleted_at\": null\n    },\n    {\n      \"id\": \"TRX1702121252419\",\n      \"users_id\": 1,\n      \"discount\": \"51000.00\",\n      \"tax\": \"7000.00\",\n      \"subtotal\": \"185000.00\",\n      \"total\": \"1340000.00\",\n      \"notes\": null,\n      \"created_at\": \"2017-02-12 12:27:41\",\n      \"updated_at\": \"2017-02-12 12:32:31\",\n      \"deleted_at\": null\n    }\n  ]\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"List of Transaction\",\n  \"data\": {\n    \"list_transaction\": [\n      {\n        \"id\": \"TRX1702120111074\",\n        \"users_id\": 1,\n        \"discount\": \"5000.00\",\n        \"tax\": \"5000.00\",\n        \"subtotal\": \"125000.00\",\n        \"total\": \"120000.00\",\n        \"notes\": null,\n        \"created_at\": \"2017-02-12 13:11:07\",\n        \"user\": {\n          \"id\": 1,\n          \"name\": \"Hery kuswandi\",\n          \"email\": \"hery@gmail.com\",\n          \"fb_token\": null,\n          \"gender\": null,\n          \"birtdate\": null,\n          \"phone\": \"084737437434\",\n          \"address\": null,\n          \"photo\": null,\n          \"created_at\": \"2017-02-09 13:55:50\"\n        }\n      },\n      {\n        \"id\": \"TRX1702120110427\",\n        \"users_id\": 1,\n        \"discount\": \"5000.00\",\n        \"tax\": \"5000.00\",\n        \"subtotal\": \"125000.00\",\n        \"total\": \"120000.00\",\n        \"notes\": null,\n        \"created_at\": \"2017-02-12 13:10:42\",\n        \"user\": {\n          \"id\": 1,\n          \"name\": \"Hery kuswandi\",\n          \"email\": \"hery@gmail.com\",\n          \"fb_token\": null,\n          \"gender\": null,\n          \"birtdate\": null,\n          \"phone\": \"084737437434\",\n          \"address\": null,\n          \"photo\": null,\n          \"created_at\": \"2017-02-09 13:55:50\"\n        }\n      }\n    ],\n    \"page\": \"1\"\n  }\n}",
           "type": "json"
         }
       ]
@@ -2368,14 +2818,87 @@
     "error": {
       "examples": [
         {
+          "title": "Response Failure: Data Not Found",
+          "content": "\n{\n  \"error\": true,\n  \"message\": \"Transaction Not Found\",\n  \"data\": {\n    \"list_transaction\": [],\n    \"page\": \"1\"\n  }\n}",
+          "type": "json"
+        },
+        {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/transaction/data.js",
-    "groupTitle": "Transaction"
+    "groupTitle": "Transaction",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Option Parameter usage:",
+        "content": "?q=&page=1&sortby=created_at&order=desc&filters[name]=&filters[id]=",
+        "type": "json"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "q",
+            "description": "<p>parameter for searching .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "page",
+            "description": "<p>Page Number (20 row each 1 page) <code>Default Page 1</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "sortby",
+            "description": "<p>Field name as a key for sorting <code>e.g sortby=name</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "order",
+            "description": "<p>fill between <code>asc</code> or <code>desc</code>.</p>"
+          }
+        ]
+      }
+    }
   },
   {
     "type": "GET",
@@ -2387,7 +2910,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/transaction/TRX1702120111074",
+        "content": "curl -i http://tawar.in/api/transaction/TRX1702120111074",
         "type": "json"
       }
     ],
@@ -2397,28 +2920,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "row",
-            "description": "<p>information of transactions</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Retrieve single Transaction (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": \"TRX1702120111074\",\n    \"users_id\": 1,\n    \"discount\": \"5000.00\",\n    \"tax\": \"5000.00\",\n    \"subtotal\": \"125000.00\",\n    \"total\": \"120000.00\",\n    \"notes\": null,\n    \"created_at\": \"2017-02-12 13:11:07\",\n    \"updated_at\": \"2017-02-12 13:11:07\",\n    \"deleted_at\": null\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Detail of Transaction\",\n  \"data\": {\n    \"transaction\": {\n      \"id\": \"TRX1702120110427\",\n      \"users_id\": 1,\n      \"discount\": \"5000.00\",\n      \"tax\": \"5000.00\",\n      \"subtotal\": \"125000.00\",\n      \"total\": \"120000.00\",\n      \"notes\": null,\n      \"created_at\": \"2017-02-12 13:10:42\",\n      \"user\": {\n        \"id\": 1,\n        \"name\": \"Hery kuswandi\",\n        \"email\": \"hery@gmail.com\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": \"084737437434\",\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-09 13:55:50\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -2427,18 +2932,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data Not Found\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Detail Not Found.\",\n  \"data\": {\n    \"detail\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/transaction/detail.js",
-    "groupTitle": "Transaction"
+    "groupTitle": "Transaction",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "GET",
@@ -2450,7 +2982,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/transaction/delete/TRX1702120111074",
+        "content": "curl -i http://tawar.in/api/transaction/delete/TRX1702120111074",
         "type": "json"
       }
     ],
@@ -2460,28 +2992,10 @@
       }
     ],
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "Boolean",
-            "optional": false,
-            "field": "success",
-            "description": "<p>indicated for response status. if <code>true</code> include row object. if <code>false</code> include string error messages</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object[]",
-            "optional": false,
-            "field": "data",
-            "description": "<p>array data of transactions</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Response Success Soft Delete Transaction (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": \"TRX1702120111074\",\n    \"users_id\": 1,\n    \"discount\": \"5000.00\",\n    \"tax\": \"5000.00\",\n    \"subtotal\": \"125000.00\",\n    \"total\": \"120000.00\",\n    \"notes\": null,\n    \"created_at\": \"2017-02-12 13:11:07\",\n    \"updated_at\": \"2017-02-12 13:11:07\",\n    \"deleted_at\": \"2017-02-12 14:15:21\",\n  }\n}",
+          "content": "{\n  \"error\": false,\n  \"message\": \"Delete Transaction Successfully\",\n  \"data\": {\n    \"transaction\": {\n      \"id\": \"TRX1702120110427\",\n      \"users_id\": 1,\n      \"discount\": \"5000.00\",\n      \"tax\": \"5000.00\",\n      \"subtotal\": \"125000.00\",\n      \"total\": \"120000.00\",\n      \"notes\": null,\n      \"created_at\": \"2017-02-12 13:10:42\",\n      \"user\": {\n        \"id\": 1,\n        \"name\": \"Hery kuswandi\",\n        \"email\": \"hery@gmail.com\",\n        \"fb_token\": null,\n        \"gender\": null,\n        \"birtdate\": null,\n        \"phone\": \"084737437434\",\n        \"address\": null,\n        \"photo\": null,\n        \"created_at\": \"2017-02-09 13:55:50\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -2490,18 +3004,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data not found or already removed.\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Data not found or already removed..\",\n  \"data\": {\n    \"transaction\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/transaction/trash.js",
-    "groupTitle": "Transaction"
+    "groupTitle": "Transaction",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "post",
@@ -2571,7 +3112,7 @@
       "examples": [
         {
           "title": "Response Success Create Transactions_detail (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"transactions_id\": \"TRX170209025558\",\n    \"products_id\": \"4\",\n    \"real_price\": \"125000.00\",\n    \"bargain_price\": \"100000.00\",\n    \"updated_at\": \"2017-02-12 13:35:57\",\n    \"created_at\": \"2017-02-12 13:35:57\",\n    \"id\": 5\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Create TransactionsDetail Successfully\",\n  \"data\": {\n    \"transactions_detail\": {\n      \"id\": 1,\n      \"transactions_id\": \"TRX170209025558\",\n      \"products_id\": 2,\n      \"real_price\": \"4000.00\",\n      \"bargain_price\": \"5000.00\",\n      \"created_at\": \"2017-02-09 15:05:55\",\n      \"product\": {\n        \"id\": 2,\n        \"name\": \"Baju Blue\",\n        \"price\": \"230000.00\",\n        \"description\": null,\n        \"images\": null,\n        \"categories_id\": null,\n        \"users_id\": 2,\n        \"created_at\": null\n      },\n      \"transaction\": {\n        \"id\": \"TRX170209025558\",\n        \"users_id\": 1,\n        \"discount\": null,\n        \"tax\": null,\n        \"subtotal\": null,\n        \"total\": \"2000.00\",\n        \"notes\": null,\n        \"created_at\": \"2017-02-09 14:55:58\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -2580,18 +3121,146 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
-          "type": "json"
-        },
-        {
-          "title": "Response Failure: Field Required",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"The name field is required.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}\n\n{\n  \"error\": true,\n  \"message\": \"The products_id field is required.\",\n  \"data\": {\n    \"transactions_detail\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/transaction_detail/create.js",
-    "groupTitle": "Transactions_detail"
+    "groupTitle": "Transactions_detail",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "GET",
+    "url": "/transaction/data",
+    "title": "Retrieve List Transactions_detail",
+    "version": "1.0.0",
+    "name": "DataTransactions_detail",
+    "group": "Transactions_detail",
+    "permission": [
+      {
+        "name": "User Token Required"
+      }
+    ],
+    "success": {
+      "examples": [
+        {
+          "title": "Response Success Retrieve List Transactions_detail (example)",
+          "content": "\n\n{\n  \"error\": false,\n  \"message\": \"List of TransactionsDetail\",\n  \"data\": {\n    \"list_transactions_details_detail\": [\n      {\n        \"id\": 5,\n        \"transactions_id\": \"TRX170209025558\",\n        \"products_id\": 4,\n        \"real_price\": \"125000.00\",\n        \"bargain_price\": \"100000.00\",\n        \"created_at\": \"2017-02-12 13:35:57\",\n        \"product\": {\n          \"id\": 4,\n          \"name\": \"Sweater Blue Ocean Coldplay\",\n          \"price\": \"30000.00\",\n          \"description\": \"Available SIze X,Xl,L Free Delivery in Area Jabodetabek\",\n          \"images\": \"{'http://thumb.rl/product1.jpg','http://thumb.rl/product2.jpg'}\",\n          \"categories_id\": 2,\n          \"users_id\": 1,\n          \"created_at\": \"2017-02-12 12:10:40\"\n        },\n        \"transaction\": {\n          \"id\": \"TRX170209025558\",\n          \"users_id\": 1,\n          \"discount\": null,\n          \"tax\": null,\n          \"subtotal\": null,\n          \"total\": \"2000.00\",\n          \"notes\": null,\n          \"created_at\": \"2017-02-09 14:55:58\"\n        }\n      },\n      {\n        \"id\": 1,\n        \"transactions_id\": \"TRX170209025558\",\n        \"products_id\": 2,\n        \"real_price\": \"4000.00\",\n        \"bargain_price\": \"5000.00\",\n        \"created_at\": \"2017-02-09 15:05:55\",\n        \"product\": {\n          \"id\": 2,\n          \"name\": \"Baju Blue\",\n          \"price\": \"230000.00\",\n          \"description\": null,\n          \"images\": null,\n          \"categories_id\": null,\n          \"users_id\": 2,\n          \"created_at\": null\n        },\n        \"transaction\": {\n          \"id\": \"TRX170209025558\",\n          \"users_id\": 1,\n          \"discount\": null,\n          \"tax\": null,\n          \"subtotal\": null,\n          \"total\": \"2000.00\",\n          \"notes\": null,\n          \"created_at\": \"2017-02-09 14:55:58\"\n        }\n      }\n    ],\n    \"page\": \"1\"\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Response Failure: Data Not Found",
+          "content": "\n{\n  \"error\": true,\n  \"message\": \"Transactions_detail Not Found\",\n  \"data\": {\n    \"list_transactions_detail\": [],\n    \"page\": \"1\"\n  }\n}",
+          "type": "json"
+        },
+        {
+          "title": "Error 401 Unauthorized Response (example):",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./v1/transaction_detail/data.js",
+    "groupTitle": "Transactions_detail",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "examples": [
+      {
+        "title": "Option Parameter usage:",
+        "content": "?q=&page=1&sortby=created_at&order=desc&filters[name]=&filters[id]=",
+        "type": "json"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "q",
+            "description": "<p>parameter for searching .</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "page",
+            "description": "<p>Page Number (20 row each 1 page) <code>Default Page 1</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "sortby",
+            "description": "<p>Field name as a key for sorting <code>e.g sortby=name</code>.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "order",
+            "description": "<p>fill between <code>asc</code> or <code>desc</code>.</p>"
+          }
+        ]
+      }
+    }
   },
   {
     "type": "GET",
@@ -2603,7 +3272,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/transactions_detail/4",
+        "content": "curl -i http://tawar.in/api/transactions_detail/4",
         "type": "json"
       }
     ],
@@ -2634,7 +3303,7 @@
       "examples": [
         {
           "title": "Response Success Retrieve single Transactions_detail (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": 5,\n    \"transactions_id\": \"TRX170209025558\",\n    \"products_id\": 4,\n    \"real_price\": \"125000.00\",\n    \"bargain_price\": \"100000.00\",\n    \"created_at\": \"2017-02-12 13:35:57\",\n    \"updated_at\": \"2017-02-12 13:35:57\",\n    \"deleted_at\": null\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Detail of TransactionsDetail\",\n  \"data\": {\n    \"transactions_detail\": {\n      \"id\": 1,\n      \"transactions_id\": \"TRX170209025558\",\n      \"products_id\": 2,\n      \"real_price\": \"4000.00\",\n      \"bargain_price\": \"5000.00\",\n      \"created_at\": \"2017-02-09 15:05:55\",\n      \"product\": {\n        \"id\": 2,\n        \"name\": \"Baju Blue\",\n        \"price\": \"230000.00\",\n        \"description\": null,\n        \"images\": null,\n        \"categories_id\": null,\n        \"users_id\": 2,\n        \"created_at\": null\n      },\n      \"transaction\": {\n        \"id\": \"TRX170209025558\",\n        \"users_id\": 1,\n        \"discount\": null,\n        \"tax\": null,\n        \"subtotal\": null,\n        \"total\": \"2000.00\",\n        \"notes\": null,\n        \"created_at\": \"2017-02-09 14:55:58\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -2643,18 +3312,45 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data Not Found\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Transactions_detail Not Found.\",\n  \"data\": {\n    \"transactions_detail\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/transaction_detail/detail.js",
-    "groupTitle": "Transactions_detail"
+    "groupTitle": "Transactions_detail",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   },
   {
     "type": "GET",
@@ -2666,7 +3362,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "curl -i http://tawar.in/transactions_detail/delete/4",
+        "content": "curl -i http://tawar.in/api/transactions_detail/delete/4",
         "type": "json"
       }
     ],
@@ -2697,7 +3393,7 @@
       "examples": [
         {
           "title": "Response Success Soft Delete Transactions_detail (example)",
-          "content": "{\n  \"success\": true,\n  \"row\": {\n    \"id\": 5,\n    \"transactions_id\": \"TRX170209025558\",\n    \"products_id\": 4,\n    \"real_price\": \"125000.00\",\n    \"bargain_price\": \"100000.00\",\n    \"created_at\": \"2017-02-12 13:35:57\",\n    \"updated_at\": \"2017-02-12 13:35:57\",\n    \"deleted_at\": \"2017-02-12 15:31:22\"\n  }\n}",
+          "content": "\n{\n  \"error\": false,\n  \"message\": \"Delete TransactionsDetail Successfully\",\n  \"data\": {\n    \"transactions_detail\": {\n      \"id\": 1,\n      \"transactions_id\": \"TRX170209025558\",\n      \"products_id\": 2,\n      \"real_price\": \"4000.00\",\n      \"bargain_price\": \"5000.00\",\n      \"created_at\": \"2017-02-09 15:05:55\",\n      \"product\": {\n        \"id\": 2,\n        \"name\": \"Baju Blue\",\n        \"price\": \"230000.00\",\n        \"description\": null,\n        \"images\": null,\n        \"categories_id\": null,\n        \"users_id\": 2,\n        \"created_at\": null\n      },\n      \"transaction\": {\n        \"id\": \"TRX170209025558\",\n        \"users_id\": 1,\n        \"discount\": null,\n        \"tax\": null,\n        \"subtotal\": null,\n        \"total\": \"2000.00\",\n        \"notes\": null,\n        \"created_at\": \"2017-02-09 14:55:58\"\n      }\n    }\n  }\n}",
           "type": "json"
         }
       ]
@@ -2706,17 +3402,44 @@
       "examples": [
         {
           "title": "Error 401 Unauthorized Response (example):",
-          "content": "HTTP/1.1 401 Not Authenticated\n{\n  \"error\": \"Unauthenticated.\"\n}",
+          "content": "{\n  \"error\": \"true\",\n  \"message\": \"User Unauthenticated. Make Sure Your Token is Correct\",\n  \"data\": {}\n}",
           "type": "json"
         },
         {
           "title": "Response Failure: Data Not Found",
-          "content": "{\n  \"success\": false,\n  \"messages\": \"Data not found or already removed.\"\n}",
+          "content": "{\n  \"error\": true,\n  \"message\": \"Data not found or already removed..\",\n  \"data\": {\n    \"transactions_detail\": {}\n  }\n}",
           "type": "json"
         }
       ]
     },
     "filename": "./v1/transaction_detail/trash.js",
-    "groupTitle": "Transactions_detail"
+    "groupTitle": "Transactions_detail",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Accept",
+            "description": "<p><code>application/json</code></p>"
+          },
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>specify access token as a Bearer. format value : <code>Bearer your-token-from-login</code></p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Header-Example:",
+          "content": "{\n  Accept:application/json\n  Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImYyMWE1NGNmOGU1ZTExYmFkZDExYjlkNTJhYWFlNjJlMjE1NTFkYzVjNjVmOGQ1OGZmODk4NjRiZTZmYzYwYzVhOWJkZWRkZmMwMjkxMmRiIn0.eyJhdWQiOiIxIiwianRpIjoiZjIxYTU0Y2Y4ZTVlMTFiYWRkMTFiOWQ1MmFhYWU2MmUyMTU1MWRjNWM2NWY4ZDU4ZmY4OTg2NGJlNmZjNjBjNWE5YmRlZGRmYzAyOTEyZGIiLCJpYXQiOjE0ODY4ODcyMzgsIm5iZiI6MTQ4Njg4NzIzOCwiZXhwIjoxNTE4NDIzMjM4LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.EAkDLLvuF6NnBXIBYRWXke5EkeaFwl_ORCWHWOlqGeJzLrKTNu0wOyzyyWvNRwSc67FzS4J9sDQhFportJh-YBfcF9tNYeskDFh0n_ZvLlGhYhgyARWEkGV2LCoGxZfndEGQZRst74fhjbqWmI9wskiKiboAa9jJr1XwN1bHHgXASTh22ZX8y1wCFhOc2Yi89ePPHvLmpe87JWxrXw2mDwbNrxYA9lSAyft-IyEMT3jNphNQTDZ1OhL8x6suZjuqbJr11eLfGDE2Oliaj8N2XnMuB6yAWu5yvsIClPmknSMf4yElUOElZh-pk9bjr3OB9yLZid9v1gZLJeCfMBcEJxtrtiwO2hrzui29EMrdpX9LJXv3s_nQbdL4zP4w6NAYafVEYuVd6JU6mWH_RYiynssnDow8o473G8waO6Ovvd08ybHmGHRtApUD6-JfMwQ3N16qqGoIjwCbwELRnkCeiRBmNgsXbSTSDx9_XkeaN6t4A1OgQQJD3bf4eTk1zZVyFCkY02USn96Yq2sWqsUyRgXOjToy_uDLsiIv-vUFuI6l0noILYd9JjWz1h7ZpX9ifh2l8RuTOqn7zY8rUwBaaWU79mwE23uAZg53UcwxhWASo7x3OsNZsahhoxFkE62eYktXcjU0j8pKraht9eMGI9MR9Fp--QYwxGiFtFvNtds\n}",
+          "type": "json"
+        }
+      ]
+    }
   }
 ]

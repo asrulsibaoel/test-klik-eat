@@ -26,9 +26,9 @@ class ChatsRoomController extends Controller
         $this->payload_list['page']=$option_list['page'];
         
         if(count($option_list['data'])>0){
-            $results=successResult("List of Category",$this->payload_list);
+            $results=successResult("List of ChatsRoom",$this->payload_list);
         }else{
-            $results=errorResult("Category Not Found",$this->payload_list);
+            $results=errorResult("ChatsRoom Not Found",$this->payload_list);
         }
 
         return $results;

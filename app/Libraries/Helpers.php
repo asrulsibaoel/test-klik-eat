@@ -36,6 +36,7 @@
         }
         // filters
         $filters=$request->input('filters');
+        if(is_array($filters))
         foreach ($filters as $field=>$filter) {
             if(!empty($filter))
             $query_object=$query_object->Where($field,$filter);
@@ -61,7 +62,7 @@
         // paging
         $page=($request->input('page')>0) ? $request->input('page') : '1' ;
         if($page){
-            $take=10;
+            $take=20;
             $skip=$take*($page-1);
             $query_object=$query_object->skip($skip)->take($take);
         }

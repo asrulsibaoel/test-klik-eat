@@ -12,6 +12,13 @@ class Transaction extends Model
 	public $incrementing = false;
     protected $dates = ['deleted_at'];
     //
-    protected $fillable=['id','users_id','discount','tax','subtotal','total','notes'];
-    
+    public $fillable=['id','users_id','discount','tax','subtotal','total','notes','created_at'];
+
+    public $hidden=['updated_at','deleted_at'];
+ 
+	public function user()
+    {
+        return $this->belongsTo('App\User','users_id');
+    }
+ 
 }

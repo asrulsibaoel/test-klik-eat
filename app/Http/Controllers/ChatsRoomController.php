@@ -8,163 +8,131 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ChatsRoomController extends Controller
-{
+{   
+    private $payload_list=array("list_chatsroom"=> null,'page'=>1);
+    private $payload_info=array("chatsroom"=> null);
 
     public function data(Request $request)
     {
-  /*
-    // debugging Queyr
-  \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
-        var_dump($query->sql);
-    });
-*/
-        $data=ChatsRoom::all();
-        $result=array(
-            'success'=>true,
-            'data'=>$data
-        );
+      
+/*      \Event::listen('Illuminate\Database\Events\QueryExecuted', function ($query) {
+            var_dump($query->sql);
+        });
+*/    
+        $chatsroom=new ChatsRoom();
+        $option_list=optionList($chatsroom,$request);
+        
+        $this->payload_list['list_chatsroom']=$option_list['data'];
+        $this->payload_list['page']=$option_list['page'];
+        
+        if(count($option_list['data'])>0){
+            $results=successResult("List of ChatsRoom",$this->payload_list);
+        }else{
+            $results=errorResult("ChatsRoom Not Found",$this->payload_list);
+        }
 
-        return response()->json($result);
-
+        return $results;
     }
-
 
     public function create(Request $request)
     {
-        //
         $validator=Validator::make($request->all(), [
             'name' => 'required'
         ]);
 
-        // echo Helpers::result();
         if($validator->fails()){
-            $result=array(
-                "success"=>false,
-                "messages"=>$validator->messages()->first(),
-                );
-
+            $results=errorResult($validator->messages()->first(),$this->payload_info);
         }else{
             $data_input = $request->all();
             $created=ChatsRoom::create($data_input);        
-        
-            $result=array(
-                "success"=>true,
-                "row"=>$created
-                );
+            $this->payload_info['chatsroom']=$created;
+            $results=successResult("Create Chats Room Successfully",$this->payload_info);
         }
 
-        return response()->json($result);
+        return $results;
 
     }
 
     public function detail($id)
     {
-
         $row=ChatsRoom::find($id);
-                if($row!=null){
-            $result=array(
-                'success'=>true,
-                'row'=>$row
-            );
+
+        if(count($row)>0){
+           $this->payload_info['chatsroom']=$row;
+           $results=successResult("Detail of Chats Room",$this->payload_info);
+
         }else{
-            $result=array(
-                'success'=>false,
-                'row'=>"Data Not Found"
-            );
+           $results=errorResult("Chats Room not found",$this->payload_info);
         }
 
-
-        return response()->json($result);
-
+        return $results;
     }
 
-    public function update(Request $request, ChatsRoom $chatsRoom)
+    public function update(Request $request, ChatsRoom $chatsroom)
     {
         $validator=Validator::make($request->all(), [
             'name' => 'required'
         ]);
 
-        // echo Helpers::result();
         if($validator->fails()){
-            $result=array(
-                "success"=>false,
-                "messages"=>$validator->messages()->first(),
-                );
-
+               $results=errorResult($validator->messages()->first(),$this->payload_info);
         }else{
 
             $data_input = $request->all();
-            // $updated=$chatsRoom->where('users_id',1)->where('id',request->input('id'))->update($data_input);        
-            $chatsRoom_id=$request->input('id');
-           $updated=ChatsRoom::where('id', $chatsRoom_id)
-          ->update($data_input);
+            $chatsroom_id=$request->input('id');
+            $updated=ChatsRoom::where('id', $chatsroom_id)
+                                  ->update($data_input);
 
             if($updated){
-                $result=array(
-                    "success"=>true,
-                    "row"=>$chatsRoom->find($chatsRoom_id)
-                    );
+               $this->payload_info['chatsroom']=$chatsroom->find($chatsroom_id);
+               $results=successResult("Update Chats Room Successfully",$this->payload_info);
+
             }else{
-                $result=array(
-                    "success"=>false,
-                    "messages"=>"chatsRoom Not Found"
-                    );
+               $results=errorResult("Update Chats Room Failed",$this->payload_info);
             }
+
         }
 
-        return response()->json($result);
+        return $results;
     }
 
     public function delete($id)
     {
-  
-        $chatsRoom=ChatsRoom::find($id);
-        if($chatsRoom!=null){
-            $chatsRoom->delete();
-            if ($chatsRoom->trashed()) {
-               $result=array(
-                        "success"=>true,
-                        "row"=>$chatsRoom
-                        );
+        $this->payload_info=array(
+            "chatsroom"=> new \stdClass()
+            );
+        
+        $chatsroom=ChatsRoom::find($id);
+        if($chatsroom!=null){
+            $chatsroom->delete();
+            if ($chatsroom->trashed()) {
+               $this->payload_info['chatsroom']=$chatsroom;
+               $results=successResult("Delete ChatsRoom Successfully",$this->payload_info);
             }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Delete data failed"
-                        );
+               $results=errorResult("Delete Chats Room Failed",$this->payload_info);
             }
         }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Data not found or already removed."
-                        );
-
+               $results=errorResult("Chats Room not found or already removed.",$this->payload_info);
         }
-        return response()->json($result);
+
+        return $results;
     }
 
-    public function force_delete($id){
-        $chatsRoom=ChatsRoom::onlyTrashed()->find($id);
-        ($chatsRoom!==null) ? '' : $chatsRoom=ChatsRoom::find($id);;
-        if($chatsRoom!=null){
-            if ($chatsRoom->forceDelete()) {
-               $result=array(
-                        "success"=>true,
-                        "row"=>$chatsRoom
-                        );
+    public function force_delete($id){        
+
+        $chatsroom=ChatsRoom::onlyTrashed()->find($id);
+        ($chatsroom!==null) ? '' : $chatsroom=ChatsRoom::find($id);;
+        if($chatsroom!=null){
+            if ($chatsroom->forceDelete()) {
+               $this->payload['chatsroom']=$chatsroom;
+               $results=successResult("Force Delete Chats Room Successfully",$this->payload_info);
             }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Delete data failed"
-                        );
+               $results=errorResult("Force Delete Chats Room Failed",$this->payload_info);
             }
         }else{
-                $result=array(
-                        "success"=>false,
-                        "messages"=>"Data not found or already removed."
-                        );
-
+               $results=errorResult("Chats Room not found or already removed.",$this->payload_info);
         }
-        return response()->json($result);
+        return $results;
     }
 
 }

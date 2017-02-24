@@ -11,7 +11,9 @@ class ChatsRoom extends Model
     
     protected $dates = ['deleted_at'];
     //
-    protected $fillable=['name'];
+    public $fillable=['name','created_at'];
+
+    public $hidden=['updated_at','deleted_at'];
 
 }
 

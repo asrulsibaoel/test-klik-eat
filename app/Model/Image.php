@@ -13,7 +13,7 @@ class Image extends Model
     
     protected $dates = ['deleted_at'];
 
-    public $fillable = ['users_id', 'filename', 'filetype', 'filesize'];
+    public $fillable = ['users_id', 'filename', 'filetype', 'filesize', 'url_cloud'];
 
     public $hidden = ['updated_at', 'deleted_at']; 
 }

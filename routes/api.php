@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::group(['middleware' => ['auth:api']], function () {
+
     Route::get('/account/profile', 'UserController@profile');
     Route::post('/account/edit_profile', 'UserController@edit_profile');
 /*------------------------------------
@@ -88,7 +89,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('/transactions_detail/force_delete/{id}', 'TransactionsDetailController@force_delete');
 
 
-
-
+    Route::post('/image/upload', 'ImageController@upload');
 });
 

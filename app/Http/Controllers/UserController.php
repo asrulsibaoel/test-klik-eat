@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    private $payload_info=array("user"=> null);
+    private $payload_info=["user"=> null];
 
     public function register(Request $request)
     {
@@ -86,7 +86,7 @@ class UserController extends Controller
         return $results;
     }
 
-   public function edit_profile(Request $request)
+   public function editProfile(Request $request)
     {
 
         $validator=Validator::make($request->all(), [
@@ -110,7 +110,7 @@ class UserController extends Controller
 
             $isUpdated=Auth::user()->update($data_input);        
             if($isUpdated){
-               $this->payload_info['InfoCategory']=$category->find($category_id);
+//               $this->payload_info['InfoCategory']=$category->find($category_id);
                $results=successResult("Update User Successfully",$this->payload_info);
             }else{
                $results=errorResult("Update Profile Failed",$this->payload_info);

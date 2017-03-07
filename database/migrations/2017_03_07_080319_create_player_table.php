@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategoriesTable extends Migration
+class CreatePlayerTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('player', function (Blueprint $table) {
+            $table->engine = "MyISAM";
             $table->increments('id');
-            $table->string('name')->nullable();
+            $table->integer("game_id");
+            $table->foreign("game_id")->references("id")->on("game");
+            $table->string("player_name");
+            $table->integer("score");
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +32,6 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('player');
     }
 }

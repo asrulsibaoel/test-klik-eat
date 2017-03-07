@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateChatsRooms extends Migration
+class CreateGameTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateChatsRooms extends Migration
      */
     public function up()
     {
-        Schema::create('chats_rooms', function (Blueprint $table) {
-            $table->increments('id');   
-            $table->string('name')->nullable();
+        Schema::create('game', function (Blueprint $table) {
+            $table->engine = "MyISAM";
+            $table->increments('id');
+            $table->string("game_name");
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +29,6 @@ class CreateChatsRooms extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chats_rooms');
+        Schema::dropIfExists('game');
     }
 }
